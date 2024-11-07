@@ -1,0 +1,11 @@
+
+control-plane.database.enabled=false
+# use only if database is enabled
+spring.datasource.hikari.connectionTimeout=30000
+spring.datasource.hikari.idleTimeout=600000
+spring.datasource.hikari.maxLifetime=1800000
+spring.datasource.url=jdbc:postgresql://localhost:5432/controlplane_db
+spring.datasource.username=
+spring.datasource.password=
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.hibernate.ddl-auto=update
