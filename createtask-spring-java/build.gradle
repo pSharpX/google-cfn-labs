@@ -9,6 +9,7 @@ plugins {
 
 group = 'com.onebank.taskmaster.controlplane'
 version = '0.0.1-SNAPSHOT'
+name = "createtask-spring"
 
 java {
 	toolchain {
@@ -74,6 +75,9 @@ shadowJar {
 	transform(PropertiesFileTransformer) {
 		paths = ["META-INF/spring.factories"]
 		mergeStrategy = "append"
+		archiveBaseName = name
+		archiveClassifier = ""
+		archiveVersion = ""
 	}
 }
 
@@ -89,19 +93,20 @@ jar{
 }
 
 bootJar {
-	archiveFileName = "app.jar"
+	archiveFileName = "${createtask-spring}.jar"
 }
 
 task deploy(dependsOn: shadowJar, type: Exec){
 	doFirst {
 		file("$buildDir/libs/app.jar").delete()
 	}
-	workingDir  "$buildDir/libs"
-	commandLine 'gcloud', 'functions', 'deploy', 'cloud-storage-upload-function', '--gen2',
+	commandLine 'echo task completed !'
+	//workingDir  "$buildDir/libs"
+	/*commandLine 'gcloud', 'functions', 'deploy', 'cloud-storage-upload-function', '--gen2',
 			'--region=us-central1',
 			'--entry-point=org.springframework.cloud.function.adapter.gcp.GcfJarLauncher',
 			'--runtime=java17',
 			'--trigger-http',
 			'--source build/libs',
-			'--memory', '1024M', '--timeout', '540'
+			'--memory', '1024M', '--timeout', '540'*/
 }

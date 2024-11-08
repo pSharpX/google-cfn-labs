@@ -2,8 +2,8 @@ package com.onebank.taskmaster.createtask.function;
 
 import com.onebank.taskmaster.createtask.model.CreateTaskRequest;
 import com.onebank.taskmaster.createtask.service.CreateTask;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.function.adapter.gcp.FunctionInvoker;
-import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
@@ -11,10 +11,14 @@ import org.springframework.stereotype.Component;
 import java.util.function.Function;
 
 @Component
-public class CreateTaskFunction {
+@RequiredArgsConstructor
+public class CreateTaskFunction implements Function<CreateTaskRequest, Message<String>> {
 
-    @Bean
-    public Function<CreateTaskRequest, Message<String>> entry(CreateTask taskMaster) {
-        return request -> MessageBuilder.withPayload(taskMaster.createNewTask(request)).setHeader(FunctionInvoker.HTTP_STATUS_CODE, 201).build();
+    private final CreateTask taskMaster;
+
+    @Override
+    public Message<String> apply(CreateTaskRequest request) {
+        String taskId = taskMaster.createNewTask(request);
+        return MessageBuilder.withPayload(taskId).setHeader(FunctionInvoker.HTTP_STATUS_CODE, 201).build();
     }
 }
