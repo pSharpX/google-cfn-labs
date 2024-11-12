@@ -39,7 +39,9 @@ public class CreateTaskFunction implements Function<CreateTaskRequest, Message<S
             return MessageBuilder.withPayload(taskId).setHeader(FunctionInvoker.HTTP_STATUS_CODE, 201).build();
         } catch (MethodArgumentNotValidException ex) {
             return exceptionHandler.handleBadRequestException(ex);
-        } catch (BindException | IllegalArgumentException | ConstraintViolationException ex) {
+        } catch (BindException ex) {
+            return exceptionHandler.handleBadRequestException(ex);
+        } catch (IllegalArgumentException | ConstraintViolationException ex) {
             return exceptionHandler.handleBadRequestException(ex);
         } catch (BadRequestException ex) {
             return exceptionHandler.handleBadRequestException(ex);

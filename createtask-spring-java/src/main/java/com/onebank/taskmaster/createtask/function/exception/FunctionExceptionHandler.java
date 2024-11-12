@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -48,6 +49,20 @@ public class FunctionExceptionHandler extends AbstractExceptionHandler<Message<S
     public Message<String> handleBadRequestException(Exception ex) {
         log.error("Handle Bad Request Error: {}", ExceptionUtils.getStackTrace(ex));
         String error = serializeErrorResponse(GenericErrorResponse.badRequest(ex.getMessage()));
+        return MessageBuilder
+                .withPayload(error)
+                .setHeader(FunctionInvoker.HTTP_STATUS_CODE, 400)
+                .build();
+    }
+
+    @ExceptionHandler(BindException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Message<String> handleBadRequestException(BindException ex) {
+        String message = ex.getBindingResult().getFieldErrors()
+                .stream().map(fieldError -> Optional.ofNullable(fieldError.getDefaultMessage())
+                        .orElse(ExceptionConstantsUtils.BAD_REQUEST_ERROR_MESSAGE))
+                .findFirst().orElse(ex.getMessage());
+        String error = serializeErrorResponse(GenericErrorResponse.badRequest(message));
         return MessageBuilder
                 .withPayload(error)
                 .setHeader(FunctionInvoker.HTTP_STATUS_CODE, 400)
