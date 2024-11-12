@@ -9,7 +9,7 @@ plugins {
 
 group = 'com.onebank.taskmaster.controlplane'
 version = '0.0.1-SNAPSHOT'
-name = "createtask-spring"
+def appName = "createtask-spring"
 
 java {
 	toolchain {
@@ -48,9 +48,16 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	implementation 'org.postgresql:postgresql'
+	// https://github.com/GoogleCloudPlatform/cloud-sql-jdbc-socket-factory/blob/main/docs/jdbc.md#connecting-to-cloud-sql-using-jdbc
+	implementation 'com.google.cloud.sql:postgres-socket-factory:1.20.0'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
 	testImplementation 'org.testcontainers:junit-jupiter'
@@ -75,7 +82,7 @@ shadowJar {
 	transform(PropertiesFileTransformer) {
 		paths = ["META-INF/spring.factories"]
 		mergeStrategy = "append"
-		archiveBaseName = name
+		archiveBaseName = appName
 		archiveClassifier = ""
 		archiveVersion = ""
 	}
@@ -93,7 +100,7 @@ jar{
 }
 
 bootJar {
-	archiveFileName = "${createtask-spring}.jar"
+	archiveFileName = "${appName}.jar"
 }
 
 task deploy(dependsOn: shadowJar, type: Exec){
