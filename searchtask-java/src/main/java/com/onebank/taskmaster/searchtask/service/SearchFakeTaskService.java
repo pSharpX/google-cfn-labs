@@ -10,7 +10,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class SearchTaskService implements SearchTask {
+public class SearchFakeTaskService implements SearchTask {
 
 	@Override
 	public SearchTaskResponse search(@NonNull SearchTaskParam param) {
