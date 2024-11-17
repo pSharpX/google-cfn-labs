@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
 @Setter
@@ -15,7 +16,7 @@ import java.util.Map;
 public class GenericMessage<T> implements Message<T>, Serializable {
 
     private T payload;
-    private Map<String, Object> headers;
+    private Map<String, Object> headers = new ConcurrentHashMap<>();
 
     @Override
     public T getPayload() {

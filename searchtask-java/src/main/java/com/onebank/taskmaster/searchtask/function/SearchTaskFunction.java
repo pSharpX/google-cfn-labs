@@ -6,7 +6,6 @@ import com.google.cloud.functions.HttpResponse;
 import com.onebank.taskmaster.searchtask.exception.BadRequestException;
 import com.onebank.taskmaster.searchtask.exception.ResourceNotFoundException;
 import com.onebank.taskmaster.searchtask.function.exception.FunctionExceptionHandler;
-import com.onebank.taskmaster.searchtask.function.interceptors.Auditable;
 import com.onebank.taskmaster.searchtask.function.model.GenericMessage;
 import com.onebank.taskmaster.searchtask.function.model.Message;
 import com.onebank.taskmaster.searchtask.function.model.MessageBuilder;
@@ -19,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.net.HttpURLConnection;
 
-@Auditable
 @RequiredArgsConstructor
 public class SearchTaskFunction implements HttpFunction {
 
