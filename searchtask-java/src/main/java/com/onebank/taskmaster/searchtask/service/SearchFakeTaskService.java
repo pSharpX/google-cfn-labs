@@ -2,6 +2,7 @@ package com.onebank.taskmaster.searchtask.service;
 
 import java.util.List;
 
+import com.onebank.taskmaster.searchtask.function.interceptors.Auditable;
 import com.onebank.taskmaster.searchtask.model.SearchTaskParam;
 import com.onebank.taskmaster.searchtask.model.SearchTaskResponse;
 import com.onebank.taskmaster.searchtask.model.TaskDetails;
@@ -9,6 +10,7 @@ import com.onebank.taskmaster.searchtask.model.TaskStatus;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+@Auditable
 @RequiredArgsConstructor
 public class SearchFakeTaskService implements SearchTask {
 
