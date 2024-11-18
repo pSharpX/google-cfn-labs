@@ -1,7 +1,6 @@
 package com.onebank.taskmaster.searchtask.service;
 
 import java.util.List;
-import java.util.Properties;
 
 import com.google.inject.Inject;
 import com.onebank.taskmaster.searchtask.config.AppConfigProperties;
@@ -18,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 @Auditable
 @RequiredArgsConstructor(onConstructor = @__({@Inject}))
 public class SearchFakeTaskService implements SearchTask {
-	private final Properties properties;
 	private final ConfigProvider configProvider;
 
 	@Override
