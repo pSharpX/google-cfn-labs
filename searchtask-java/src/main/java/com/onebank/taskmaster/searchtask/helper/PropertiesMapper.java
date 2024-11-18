@@ -1,5 +1,6 @@
 package com.onebank.taskmaster.searchtask.helper;
 
+import com.onebank.taskmaster.searchtask.config.PropertiesPrefix;
 import lombok.experimental.UtilityClass;
 
 import java.lang.reflect.Field;
@@ -18,23 +19,30 @@ public class PropertiesMapper {
         try {
             // Create an instance of the POJO
             T pojo = clazz.getDeclaredConstructor().newInstance();
+            // Check for a prefix annotation
+            String prefix = "";
+            if (clazz.isAnnotationPresent(PropertiesPrefix.class)) {
+                PropertiesPrefix annotation = clazz.getAnnotation(PropertiesPrefix.class);
+                prefix = !annotation.value().trim().isEmpty() ? annotation.value().trim() + "." : "";
+            }
 
             // Iterate through all fields of the class
             for (Field field : clazz.getDeclaredFields()) {
                 field.setAccessible(true); // Make the field accessible
 
                 String fieldName = field.getName();
+                String propertyName = prefix + fieldName;
 
                 if (isPrimitiveOrWrapper(field.getType()) || field.getType() == String.class) {
                     // Handle primitive or basic field types
-                    String propertyValue = properties.getProperty(fieldName);
+                    String propertyValue = properties.getProperty(propertyName);
                     if (propertyValue != null) {
                         Object value = convertValue(propertyValue, field.getType());
                         field.set(pojo, value);
                     }
                 } else {
                     // Handle nested objects
-                    Properties nestedProperties = extractNestedProperties(properties, fieldName);
+                    Properties nestedProperties = extractNestedProperties(properties, propertyName);
                     if (!nestedProperties.isEmpty()) {
                         Object nestedObject = mapPropertiesToPojo(nestedProperties, field.getType());
                         field.set(pojo, nestedObject);
