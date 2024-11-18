@@ -1,4 +1,4 @@
-package com.onebank.taskmaster.searchtask.config;
+package com.onebank.taskmaster.searchtask.modules;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
@@ -26,14 +26,10 @@ public class FunctionModule extends AbstractModule {
         bind(TaskRepository.class).to(DefaultTaskRepository.class).in(Scopes.SINGLETON);
         bind(TagRepository.class).to(DefaultTagRepository.class).in(Scopes.SINGLETON);
         bind(ConvertTo.class).to(TaskDetailsConverter.class).in(Scopes.SINGLETON);
-        // bind(Validator.class).toProvider(ValidatorProvider.class).in(Scopes.SINGLETON);
 
-        // Bind the interceptor to methods annotated with @LogExecutionTime
-        // bindInterceptor(Matchers.any(), Matchers.annotatedWith(Auditable.class), new LoggerInterceptor());
-        // Bind the interceptor to all methods of classes annotated with @LogExecutionTime
-        // bindInterceptor(Matchers.annotatedWith(Auditable.class), Matchers.any(), new LoggerInterceptor());
-
+        // Bind the interceptor to all methods of classes annotated with @Auditable
         bindInterceptor(Matchers.annotatedWith(Auditable.class), Matchers.any(), new LoggerInterceptor());
+        // Bind the interceptor to methods annotated with @Validated
         bindInterceptor(Matchers.any(), Matchers.annotatedWith(Validated.class), new ValidatorInterceptor());
     }
 }

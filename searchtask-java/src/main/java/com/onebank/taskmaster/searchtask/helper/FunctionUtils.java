@@ -6,6 +6,7 @@ import lombok.experimental.UtilityClass;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 @UtilityClass
 public class FunctionUtils {
@@ -21,6 +22,10 @@ public class FunctionUtils {
 
     public static <T> T convertTo(Class<T> type, InputStream inputStream) throws IOException {
         return objectMapper.readValue(inputStream, type);
+    }
+
+    public static <T> T convertTo(Class<T> type, Map<String, Object> map) throws IOException {
+        return objectMapper.convertValue(map, type);
     }
 
     public static <T> T convertTo(Class<T> type, byte[] content) throws IOException {
