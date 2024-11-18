@@ -1,5 +1,6 @@
 package com.onebank.taskmaster.searchtask.service;
 
+import com.google.inject.Inject;
 import com.onebank.taskmaster.searchtask.converter.ConvertTo;
 import com.onebank.taskmaster.searchtask.entity.TaskEntity;
 import com.onebank.taskmaster.searchtask.model.SearchTaskParam;
@@ -9,7 +10,7 @@ import com.onebank.taskmaster.searchtask.repository.TaskRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__({@Inject}))
 public class SearchPersistentTaskService implements SearchTask {
 	private final TaskRepository taskRepository;
 	private final ConvertTo<TaskEntity, TaskDetails> converter;

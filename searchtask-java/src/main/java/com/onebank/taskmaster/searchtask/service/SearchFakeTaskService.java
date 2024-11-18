@@ -2,6 +2,7 @@ package com.onebank.taskmaster.searchtask.service;
 
 import java.util.List;
 
+import com.google.inject.Inject;
 import com.onebank.taskmaster.searchtask.function.interceptors.Auditable;
 import com.onebank.taskmaster.searchtask.function.interceptors.Validated;
 import com.onebank.taskmaster.searchtask.model.SearchTaskParam;
@@ -12,7 +13,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Auditable
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__({@Inject}))
 public class SearchFakeTaskService implements SearchTask {
 
 	@Override

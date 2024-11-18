@@ -19,11 +19,7 @@ import lombok.RequiredArgsConstructor;
 import java.net.HttpURLConnection;
 
 @RequiredArgsConstructor
-public class
-
-
-SearchTaskFunction implements HttpFunction {
-
+public class SearchTaskFunction implements HttpFunction {
     private final SearchTask searchTask;
     private final FunctionExceptionHandler exceptionHandler;
 
