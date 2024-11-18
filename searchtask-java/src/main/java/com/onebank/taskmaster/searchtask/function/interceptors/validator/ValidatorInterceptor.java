@@ -18,14 +18,13 @@ public class ValidatorInterceptor implements MethodInterceptor {
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
         Validator validator = ValidatorHelper.getValidator();
-        log.info("Start method's arguments validation");
         for (Object arg : invocation.getArguments()) {
             if (arg != null) {
                 Set<ConstraintViolation<Object>> violations = validator.validate(arg);
                 if (!violations.isEmpty()) {
-                    StringBuilder errorMessage = new StringBuilder("Validation failed: ");
+                    StringBuilder errorMessage = new StringBuilder();
                     for (ConstraintViolation<Object> violation : violations) {
-                        errorMessage.append(violation.getMessage()).append("; ");
+                        errorMessage.append(String.format("%s %s", violation.getPropertyPath().toString(), violation.getMessage())).append("; ");
                     }
                     throw new IllegalArgumentException(errorMessage.toString());
                 }

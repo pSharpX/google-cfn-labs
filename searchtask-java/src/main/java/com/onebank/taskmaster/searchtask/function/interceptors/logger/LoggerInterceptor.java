@@ -11,14 +11,12 @@ public class LoggerInterceptor implements MethodInterceptor {
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
         long startTime = System.currentTimeMillis();
-        log.info("Method {}.{}  started at {} ", invocation.getMethod().getDeclaringClass().getName(), invocation.getMethod().getName(), startTime);
 
         try {
             return invocation.proceed();
         } finally {
             long endTime = System.currentTimeMillis();
-            log.info("Method {}.{} ended at {}", invocation.getMethod().getDeclaringClass().getName(), invocation.getMethod().getName(), endTime);
-            log.info("Execution time: {} ms", (endTime - startTime));
+            log.debug("Execute {}#{} start={} end={} duration={} ms.", invocation.getMethod().getDeclaringClass().getName(), invocation.getMethod().getName(), startTime, endTime, (endTime - startTime));
         }
     }
 }
