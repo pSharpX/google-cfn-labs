@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.inject.Inject;
 import com.onebank.taskmaster.searchtask.config.AppConfigProperties;
 import com.onebank.taskmaster.searchtask.config.ConfigProvider;
-import com.onebank.taskmaster.searchtask.config.SearchTaskConfigProperties;
+import com.onebank.taskmaster.searchtask.config.FunctionConfigProperties;
 import com.onebank.taskmaster.searchtask.function.interceptors.Auditable;
 import com.onebank.taskmaster.searchtask.function.interceptors.Validated;
 import com.onebank.taskmaster.searchtask.model.SearchTaskParam;
@@ -19,12 +19,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor = @__({@Inject}))
 public class SearchFakeTaskService implements SearchTask {
 	private final ConfigProvider configProvider;
+	private final AppConfigProperties appConfigProperties;
+	private final FunctionConfigProperties functionConfigProperties;
 
 	@Override
 	@Validated
 	public SearchTaskResponse search(@NonNull SearchTaskParam param) {
-		AppConfigProperties configProperties = configProvider.getConfig(AppConfigProperties.class);
-		SearchTaskConfigProperties searchTaskConfigProperties = configProvider.getConfig(SearchTaskConfigProperties.class);
+		AppConfigProperties _configProperties = configProvider.getConfig(AppConfigProperties.class);
+		FunctionConfigProperties _functionConfigProperties = configProvider.getConfig(FunctionConfigProperties.class);
 
 		TaskDetails dummyTask = new TaskDetails();
 		dummyTask.setTaskTitle("Complete the create task implementation");

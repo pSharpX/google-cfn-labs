@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @PropertiesPrefix(value = "task-master.datasource.control-plane")
-public class SearchTaskConfigProperties {
+public class FunctionConfigProperties {
     private String url;
     private String username;
     private String password;
