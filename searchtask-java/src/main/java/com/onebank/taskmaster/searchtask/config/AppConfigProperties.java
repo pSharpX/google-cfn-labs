@@ -5,9 +5,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@PropertiesPrefix(value = "control-plane")
 public class AppConfigProperties {
     private Server server;
     private Database database;
+    private String profile;
 
     @Getter
     @Setter

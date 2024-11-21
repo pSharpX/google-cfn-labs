@@ -1,19 +1,19 @@
 package com.onebank.taskmaster.searchtask.service;
 
 import com.google.inject.Inject;
-import com.onebank.taskmaster.searchtask.converter.ConvertTo;
-import com.onebank.taskmaster.searchtask.entity.TaskEntity;
+import com.onebank.taskmaster.searchtask.converter.TaskDetailsConverter;
+import com.onebank.taskmaster.searchtask.function.interceptors.Auditable;
 import com.onebank.taskmaster.searchtask.model.SearchTaskParam;
 import com.onebank.taskmaster.searchtask.model.SearchTaskResponse;
-import com.onebank.taskmaster.searchtask.model.TaskDetails;
 import com.onebank.taskmaster.searchtask.repository.TaskRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+@Auditable
 @RequiredArgsConstructor(onConstructor = @__({@Inject}))
-public class SearchPersistentTaskService implements SearchTask {
+public class SearchTaskService implements SearchTask {
 	private final TaskRepository taskRepository;
-	private final ConvertTo<TaskEntity, TaskDetails> converter;
+	private final TaskDetailsConverter converter;
 
 	@Override
 	public SearchTaskResponse search(@NonNull SearchTaskParam param) {
