@@ -19,4 +19,11 @@ public class PersistentTaskRepository implements TaskRepository {
             return sqlSession.getMapper(TaskRepository.class).findByTitle(title);
         }
     }
+
+    @Override
+    public List<TaskEntity> findByTitleLike(String title) {
+        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            return sqlSession.getMapper(TaskRepository.class).findByTitleLike(title);
+        }
+    }
 }

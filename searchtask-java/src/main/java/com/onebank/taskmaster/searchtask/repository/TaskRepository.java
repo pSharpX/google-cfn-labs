@@ -8,11 +8,19 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 public interface TaskRepository {
-    @Select("SELECT * FROM tasks WHERE title=#{title}")
+    @Select("SELECT id, title, description, weight FROM tasks WHERE title = #{title}")
     @Results(id = "taskResultMap", value = {
             @Result(property = "id", column = "id"),
             @Result(property = "title", column = "title"),
             @Result(property = "description", column = "description"),
             @Result(property = "weight", column = "weight")})
     List<TaskEntity> findByTitle(String title);
+
+    @Select("SELECT id, title, description, weight FROM tasks WHERE title ILIKE CONCAT('%', #{title}, '%')")
+    @Results(id = "taskResultMap", value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "title", column = "title"),
+            @Result(property = "description", column = "description"),
+            @Result(property = "weight", column = "weight")})
+    List<TaskEntity> findByTitleLike(String title);
 }

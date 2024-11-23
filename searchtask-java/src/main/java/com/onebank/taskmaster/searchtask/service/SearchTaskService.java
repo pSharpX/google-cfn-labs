@@ -17,6 +17,6 @@ public class SearchTaskService implements SearchTask {
 
 	@Override
 	public SearchTaskResponse search(@NonNull SearchTaskParam param) {
-		return new SearchTaskResponse(taskRepository.findByTitle(param.getTitle()).stream().map(converter::convert).toList());
+		return new SearchTaskResponse(taskRepository.findByTitleLike(param.getTitle()).stream().map(converter::convert).toList());
 	}
 }

@@ -24,4 +24,9 @@ public class FakeTaskRepository implements TaskRepository {
         dummyTask.setProgressStatus(TaskStatus.IN_PROGRESS);
         return List.of(dummyTask);
     }
+
+    @Override
+    public List<TaskEntity> findByTitleLike(String title) {
+        return this.findByTitle(title);
+    }
 }
