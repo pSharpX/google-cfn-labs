@@ -2,6 +2,7 @@ package com.onebank.taskmaster.searchtask.repository;
 
 import com.onebank.taskmaster.searchtask.entity.TaskEntity;
 import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 
@@ -17,10 +18,6 @@ public interface TaskRepository {
     List<TaskEntity> findByTitle(String title);
 
     @Select("SELECT id, title, description, weight FROM tasks WHERE title ILIKE CONCAT('%', #{title}, '%')")
-    @Results(id = "taskResultMap", value = {
-            @Result(property = "id", column = "id"),
-            @Result(property = "title", column = "title"),
-            @Result(property = "description", column = "description"),
-            @Result(property = "weight", column = "weight")})
+    @ResultMap("taskResultMap")
     List<TaskEntity> findByTitleLike(String title);
 }
