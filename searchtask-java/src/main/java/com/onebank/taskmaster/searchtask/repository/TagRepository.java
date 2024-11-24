@@ -1,10 +1,9 @@
 package com.onebank.taskmaster.searchtask.repository;
 
 import com.onebank.taskmaster.searchtask.entity.TagEntity;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface TagRepository {
@@ -13,4 +12,8 @@ public interface TagRepository {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name")})
     Optional<TagEntity> findByName(String name);
+
+    @SelectProvider(type = SqlUtils.class, method = "getTagsByTaskId")
+    @ResultMap("tagResultMap")
+    List<TagEntity> findByTaskId(Long taskId);
 }

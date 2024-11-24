@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -17,6 +18,13 @@ public class PersistentTagRepository implements TagRepository {
     public Optional<TagEntity> findByName(String name) {
         try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
             return sqlSession.getMapper(TagRepository.class).findByName(name);
+        }
+    }
+
+    @Override
+    public List<TagEntity> findByTaskId(Long taskId) {
+        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            return sqlSession.getMapper(TagRepository.class).findByTaskId(taskId);
         }
     }
 }
