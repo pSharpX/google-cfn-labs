@@ -1,7 +1,7 @@
-# controlplane
+# createtask-spring-java
 
 ## Introduction
-The controlplane project contains all services for performing different operations with tasks management and scheduler.
+The createtask function performs and is responsible for a single operation in tasks management ecosystem.
 
 ## Getting Started
 ## 1. Configure Database
@@ -43,8 +43,8 @@ podman pull postgres:latest
 ```
 Run a container
 ```
-docker run --name some-postgres -e POSTGRES_DB=controlplane_db -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=mysecretpassword -d postgres
-podman run --name some-postgres -e POSTGRES_DB=controlplane_db -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+docker run --name some-postgres -p 5432:5432 -e POSTGRES_DB=controlplane_db -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+podman run --name some-postgres -p 5432:5432 -e POSTGRES_DB=controlplane_db -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=mysecretpassword -d postgres
 ``` 
 Connect to the postgres instance and check connectivity
 ```
@@ -60,8 +60,6 @@ spring.datasource.username=
 spring.datasource.password=
 spring.datasource.driver-class-name=org.postgresql.Driver
 ```
-
-Do not upload the local version of the application.properties to the repository. Add to .gitignore file.
 
 ## 2. Configure Cache
 Install docker and from docker hub pull one of the following supported cache tools:
@@ -95,7 +93,7 @@ spring.datasource.password=<password>
 spring.datasource.driverClassName=com.microsoft.sqlserver.jdbc.SQLServerDriver
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.SQLServer2012Dialect
 ```
-
+Do not upload the local version of the application.properties to the repository. Add to .gitignore file.
 
 ### Build and Test
 For building and running test:

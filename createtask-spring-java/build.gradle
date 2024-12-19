@@ -2,9 +2,6 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.0'
 	id 'io.spring.dependency-management' version '1.1.5'
-	id 'com.github.johnrengelman.shadow' version '8.1.1'
-	id 'maven-publish'
-	id 'org.springframework.boot.experimental.thin-launcher' version '1.0.30.RELEASE'
 }
 
 group = 'com.onebank.taskmaster.controlplane'
@@ -33,24 +30,13 @@ ext {
 
 dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-function-adapter-gcp'
-	implementation 'org.springframework.cloud:spring-cloud-function-web'
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	implementation 'io.cloudevents:cloudevents-spring:2.5.0'
-	implementation 'io.cloudevents:cloudevents-http-basic:2.5.0'
-	implementation 'io.cloudevents:cloudevents-json-jackson:2.5.0'
-	implementation 'com.google.cloud:google-cloudevent-types:0.10.0'
 	implementation 'org.springframework.cloud:spring-cloud-starter-function-web'
 	implementation 'org.springframework.cloud:spring-cloud-function-deployer'
-	implementation 'org.springframework.boot:spring-boot-loader-tools'
-	implementation 'org.springframework.boot:spring-boot-loader'
-	implementation 'com.google.cloud.functions:functions-framework-api:1.1.0'
-	implementation 'com.google.cloud.functions.invoker:java-function-invoker:1.3.0'
-
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
@@ -70,24 +56,6 @@ dependencyManagement {
 	}
 }
 
-import com.github.jengelman.gradle.plugins.shadow.transformers.*
-shadowJar {
-	mergeServiceFiles()
-	append 'META-INF/spring.handlers'
-	append 'META-INF/spring.schemas'
-	append 'META-INF/spring.tooling'
-	append 'META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports'
-	append 'META-INF/spring/org.springframework.boot.actuate.autoconfigure.web.ManagementContextConfiguration.imports'
-
-	transform(PropertiesFileTransformer) {
-		paths = ["META-INF/spring.factories"]
-		mergeStrategy = "append"
-		archiveBaseName = appName
-		archiveClassifier = ""
-		archiveVersion = ""
-	}
-}
-
 tasks.named('test') {
 	useJUnitPlatform()
 }
@@ -101,19 +69,4 @@ jar{
 
 bootJar {
 	archiveFileName = "${appName}.jar"
-}
-
-task deploy(dependsOn: shadowJar, type: Exec){
-	doFirst {
-		file("$buildDir/libs/app.jar").delete()
-	}
-	commandLine 'echo task completed !'
-	//workingDir  "$buildDir/libs"
-	/*commandLine 'gcloud', 'functions', 'deploy', 'cloud-storage-upload-function', '--gen2',
-			'--region=us-central1',
-			'--entry-point=org.springframework.cloud.function.adapter.gcp.GcfJarLauncher',
-			'--runtime=java17',
-			'--trigger-http',
-			'--source build/libs',
-			'--memory', '1024M', '--timeout', '540'*/
 }
