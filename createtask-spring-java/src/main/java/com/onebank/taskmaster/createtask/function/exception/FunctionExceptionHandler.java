@@ -14,10 +14,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.cloud.function.adapter.gcp.FunctionInvoker;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MimeTypeUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -52,6 +54,7 @@ public class FunctionExceptionHandler extends AbstractExceptionHandler<Message<S
         return MessageBuilder
                 .withPayload(error)
                 .setHeader(FunctionInvoker.HTTP_STATUS_CODE, 400)
+                .setHeader(HttpHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON_VALUE)
                 .build();
     }
 
@@ -66,6 +69,7 @@ public class FunctionExceptionHandler extends AbstractExceptionHandler<Message<S
         return MessageBuilder
                 .withPayload(error)
                 .setHeader(FunctionInvoker.HTTP_STATUS_CODE, 400)
+                .setHeader(HttpHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON_VALUE)
                 .build();
     }
 
@@ -80,6 +84,7 @@ public class FunctionExceptionHandler extends AbstractExceptionHandler<Message<S
         return MessageBuilder
                 .withPayload(error)
                 .setHeader(FunctionInvoker.HTTP_STATUS_CODE, 400)
+                .setHeader(HttpHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON_VALUE)
                 .build();
     }
 
@@ -93,6 +98,7 @@ public class FunctionExceptionHandler extends AbstractExceptionHandler<Message<S
         return MessageBuilder
                 .withPayload(error)
                 .setHeader(FunctionInvoker.HTTP_STATUS_CODE, 400)
+                .setHeader(HttpHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON_VALUE)
                 .build();
     }
 
@@ -114,6 +120,7 @@ public class FunctionExceptionHandler extends AbstractExceptionHandler<Message<S
         return MessageBuilder
                 .withPayload(error)
                 .setHeader(FunctionInvoker.HTTP_STATUS_CODE, 500)
+                .setHeader(HttpHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON_VALUE)
                 .build();
     }
 
@@ -125,6 +132,7 @@ public class FunctionExceptionHandler extends AbstractExceptionHandler<Message<S
         return MessageBuilder
                 .withPayload(error)
                 .setHeader(FunctionInvoker.HTTP_STATUS_CODE, 404)
+                .setHeader(HttpHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON_VALUE)
                 .build();
     }
 

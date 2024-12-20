@@ -1,4 +1,5 @@
 control-plane.database.enabled=false
+
 # use only if database is enabled
 spring.datasource.hikari.connectionTimeout=30000
 spring.datasource.hikari.idleTimeout=600000
@@ -9,4 +10,7 @@ spring.datasource.password=
 spring.datasource.driver-class-name=org.postgresql.Driver
 spring.jpa.hibernate.ddl-auto=update
 
-spring.cloud.function.definition=CreateTaskFunction
+management.endpoints.web.exposure.include=functions
+
+spring.cloud.function.definition=createTaskFunction
+spring.cloud.function.http.POST=createTaskFunction
