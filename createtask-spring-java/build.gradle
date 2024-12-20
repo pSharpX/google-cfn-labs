@@ -2,6 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.0'
 	id 'io.spring.dependency-management' version '1.1.5'
+	id 'com.github.johnrengelman.shadow' version '8.1.1'
+	id 'org.springframework.boot.experimental.thin-launcher' version '1.0.30.RELEASE'
 }
 
 group = 'com.onebank.taskmaster.controlplane'
@@ -56,6 +58,23 @@ dependencies {
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+import com.github.jengelman.gradle.plugins.shadow.transformers.*
+shadowJar {
+	mergeServiceFiles()
+	append 'META-INF/spring.handlers'
+	append 'META-INF/spring.schemas'
+	append 'META-INF/spring.tooling'
+	append 'META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports'
+	append 'META-INF/spring/org.springframework.boot.actuate.autoconfigure.web.ManagementContextConfiguration.imports'
+	transform(PropertiesFileTransformer) {
+		paths = ["META-INF/spring.factories"]
+		mergeStrategy = "append"
+		archiveBaseName = appName
+		archiveClassifier = ""
+		archiveVersion = ""
 	}
 }
 

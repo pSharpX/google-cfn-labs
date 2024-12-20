@@ -36,7 +36,8 @@ public class CreateTaskFunction implements Function<CreateTaskRequest, Message<S
                 throw new BindException(bindingResult);
             }
             String taskId = taskMaster.createNewTask(request);
-            return MessageBuilder.withPayload(taskId).setHeader(FunctionInvoker.HTTP_STATUS_CODE, 201).build();        } catch (MethodArgumentNotValidException ex) {
+            return MessageBuilder.withPayload(taskId).setHeader(FunctionInvoker.HTTP_STATUS_CODE, 201).build();
+        } catch (MethodArgumentNotValidException ex) {
             return exceptionHandler.handleBadRequestException(ex);
         } catch (BindException ex) {
             return exceptionHandler.handleBadRequestException(ex);

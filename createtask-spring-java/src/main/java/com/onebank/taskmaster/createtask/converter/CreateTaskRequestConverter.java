@@ -14,7 +14,7 @@ public class CreateTaskRequestConverter implements ConvertTo<CreateTaskRequest, 
                 .description(input.getTaskDescription())
                 .weight(input.getWeight())
                 .status(input.getStatus())
-                .dueDate(input.getDueDate())
+                //.dueDate(input.getDueDate())
                 .build();
     }
 }
