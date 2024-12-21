@@ -1,7 +1,9 @@
 spring.application.name=control-plane
 control-plane.server.port=8080
+
 control-plane.database.enabled=false
 control-plane.profile=local
+
 task-master.datasource.control-plane.hikari.connectionTimeout=30000
 task-master.datasource.control-plane.hikari.idleTimeout=600000
 task-master.datasource.control-plane.hikari.maxLifetime=1800000
