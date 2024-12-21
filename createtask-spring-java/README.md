@@ -62,17 +62,17 @@ spring.datasource.driver-class-name=org.postgresql.Driver
 ```
 
 ## 2. Run function locally
-Install docker and from docker hub pull one of the following supported cache tools:
+Install docker/podman and buildpacks tools:
 
 ### 2.1 Buildpacks
 Install buildpacks (depends on docker/podman) and build function image:
 
 #### 2.1.1 Installing buildpacks
-[Installing buidpacks](https://buildpacks.io/docs/for-platform-operators/how-to/integrate-ci/pack/)
+- [Installing buidpacks](https://buildpacks.io/docs/for-platform-operators/how-to/integrate-ci/pack/)
 
 #### 2.1.2 Build local image
-[Build a function with buildpacks](https://cloud.google.com/docs/buildpacks/build-function#java)
-[Configure Cloud Run and Cloud Run functions services](https://cloud.google.com/docs/buildpacks/service-specific-configs)
+- [Build a function with buildpacks](https://cloud.google.com/docs/buildpacks/build-function#java)
+- [Configure Cloud Run and Cloud Run functions services](https://cloud.google.com/docs/buildpacks/service-specific-configs)
 Configure project.toml file with the following configuration:
 ```
 [[build.env]]
@@ -97,10 +97,6 @@ Run a function container image
 ```
 docker run -it -p8080:8080 createtask-spring
 podman run -it -p8080:8080 createtask-spring
-``` 
-Connect to the redis instance and check connectivity
-```
-docker run -it --network some-network --rm redis redis-cli -h some-redis
 ```
 Visit the running function by browsing to localhost:8080.
 
