@@ -1,0 +1,95 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.3.0'
+	id 'io.spring.dependency-management' version '1.1.5'
+	id 'com.github.johnrengelman.shadow' version '8.1.1'
+	id 'org.springframework.boot.experimental.thin-launcher' version '1.0.30.RELEASE'
+}
+
+group = 'com.onebank.taskmaster.notifier.consumer'
+version = '0.0.1-SNAPSHOT'
+def appName = "emailsender-spring"
+
+tasks.named('resolveMainClassName') {
+	dependsOn tasks.named('thinPom')
+}
+
+tasks.named('compileTestJava') {
+	dependsOn tasks.named('thinPom')
+}
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('springCloudVersion', "2023.0.2")
+}
+
+dependencies {
+	implementation 'org.springframework.cloud:spring-cloud-function-adapter-gcp'
+	implementation 'org.springframework.cloud:spring-cloud-starter-function-web'
+	implementation 'org.springframework.cloud:spring-cloud-function-deployer'
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+	testImplementation 'org.testcontainers:junit-jupiter'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+import com.github.jengelman.gradle.plugins.shadow.transformers.*
+shadowJar {
+	mergeServiceFiles()
+	append 'META-INF/spring.handlers'
+	append 'META-INF/spring.schemas'
+	append 'META-INF/spring.tooling'
+	append 'META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports'
+	append 'META-INF/spring/org.springframework.boot.actuate.autoconfigure.web.ManagementContextConfiguration.imports'
+	transform(PropertiesFileTransformer) {
+		paths = ["META-INF/spring.factories"]
+		mergeStrategy = "append"
+		archiveBaseName = appName
+		archiveClassifier = ""
+		archiveVersion = ""
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+jar{
+	manifest {
+		attributes 'Main-Class': 'org.springframework.cloud.function.adapter.gcp.GcfJarLauncher'
+		attributes 'Start-Class': 'com.onebank.taskmaster.notifier.consumer.EmailNotificationApplication'
+	}
+}
+
+bootJar {
+	archiveFileName = "${appName}.jar"
+}
