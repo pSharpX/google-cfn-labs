@@ -61,39 +61,48 @@ spring.datasource.password=
 spring.datasource.driver-class-name=org.postgresql.Driver
 ```
 
-## 2. Configure Cache
+## 2. Run function locally
 Install docker and from docker hub pull one of the following supported cache tools:
 
-### 2.1 redis
-Pull redis image (redis:latest), start redis container and test the connection with any redis client
+### 2.1 Buildpacks
+Install buildpacks (depends on docker/podman) and build function image:
 
-Pull redis image from Docker Hub
+#### 2.1.1 Installing buildpacks
+[Installing buidpacks](https://buildpacks.io/docs/for-platform-operators/how-to/integrate-ci/pack/)
+
+#### 2.1.2 Build local image
+[Build a function with buildpacks](https://cloud.google.com/docs/buildpacks/build-function#java)
+[Configure Cloud Run and Cloud Run functions services](https://cloud.google.com/docs/buildpacks/service-specific-configs)
+Configure project.toml file with the following configuration:
 ```
-docker pull redis:latest
-docker pull redis:7.4.0-alpine
-podman pull redis:latest
-podman pull redis:7.4.0-alpine
+[[build.env]]
+name = "GOOGLE_RUNTIME_VERSION"
+value =  "17"
+[[build.env]]
+name = "GOOGLE_FUNCTION_SIGNATURE_TYPE"
+value =  "http"
+[[build.env]]
+name = "GOOGLE_FUNCTION_TARGET"
+value =  "org.springframework.cloud.function.adapter.gcp.GcfJarLauncher"
+[build]
+builder = "gcr.io/buildpacks/builder:google-22"
 ```
-Run a container
+
+Build image using pack CLI:
 ```
-docker run --name some-redis -d redis
-podman run --name some-redis -d redis
+pack --version
+pack build createtask-spring
+```
+Run a function container image
+```
+docker run -it -p8080:8080 createtask-spring
+podman run -it -p8080:8080 createtask-spring
 ``` 
 Connect to the redis instance and check connectivity
 ```
 docker run -it --network some-network --rm redis redis-cli -h some-redis
-```  
-Download the project from the GitHub repo, get a copy from the src/main/resources/application.properties.template for local use and put in /src/main/resources.
-
-In the application.properties modify these properties as needed to match your sqlserver configuration:
-``` 
-spring.datasource.url=jdbc:sqlserver://localhost:1433;database=<your_database_name>;
-spring.datasource.username=SA
-spring.datasource.password=<password>
-spring.datasource.driverClassName=com.microsoft.sqlserver.jdbc.SQLServerDriver
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.SQLServer2012Dialect
 ```
-Do not upload the local version of the application.properties to the repository. Add to .gitignore file.
+Visit the running function by browsing to localhost:8080.
 
 ### Build and Test
 For building and running test:
