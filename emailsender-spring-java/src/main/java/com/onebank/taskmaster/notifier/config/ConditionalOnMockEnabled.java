@@ -1,6 +1,6 @@
 package com.onebank.taskmaster.notifier.config;
 
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-@ComponentScan(basePackages = {"com.onebank.taskmaster.notifier.consumer"})
-public @interface EnableNotifier {
+@ConditionalOnProperty(name = "task-master.notification.enabled", havingValue = "false")
+public @interface ConditionalOnMockEnabled {
 }
