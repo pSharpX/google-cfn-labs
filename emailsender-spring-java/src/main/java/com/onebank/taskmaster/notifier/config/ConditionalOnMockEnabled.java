@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-@ConditionalOnProperty(name = "task-master.notification.enabled", havingValue = "false")
+@ConditionalOnProperty(name = "task-master.notification.enabled", havingValue = "false", matchIfMissing = true)
 public @interface ConditionalOnMockEnabled {
 }
