@@ -7,9 +7,11 @@ import com.onebank.taskmaster.sendnotification.email.model.sendgrid.CreateTempla
 import com.onebank.taskmaster.sendnotification.email.model.sendgrid.SendMessageRequest;
 import com.onebank.taskmaster.sendnotification.email.model.sendgrid.TemplateVersionResponse;
 import com.onebank.taskmaster.sendnotification.email.model.sendgrid.UpdateTemplateRequest;
+import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
 
+@Headers("Content-Type: application/json")
 public interface SendGridClient {
 
 	@RequestLine("POST /mail/send")

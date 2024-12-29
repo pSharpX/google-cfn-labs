@@ -1,5 +1,7 @@
 package com.onebank.taskmaster.sendnotification.email.provider.mailchimp;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.onebank.taskmaster.sendnotification.email.model.To;
 import com.onebank.taskmaster.sendnotification.email.model.mailchimp.GlobalMergeVar;
 import com.onebank.taskmaster.sendnotification.email.model.mailchimp.Message;
@@ -10,8 +12,9 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.Properties;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__({@Inject}))
 public class MailChimpClientRequestFactory {
+    @Named("mailChimpProperties")
     private final Properties config;
 
     public SendMessageWithTemplateRequest build(EmailNotificationMessage notificationMessage) {

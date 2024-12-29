@@ -1,5 +1,6 @@
 package com.onebank.taskmaster.sendnotification.email.service.sender;
 
+import com.google.inject.Inject;
 import com.onebank.taskmaster.sendnotification.email.model.sendgrid.SendMessageRequest;
 import com.onebank.taskmaster.sendnotification.email.provider.sendgrid.SendGridClient;
 import com.onebank.taskmaster.sendnotification.email.provider.sendgrid.SendGridClientRequestFactory;
@@ -8,7 +9,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__({@Inject}))
 @Slf4j
 public class SendGridEmailSender implements EmailSender {
     private final SendGridClientRequestFactory clientRequestFactory;

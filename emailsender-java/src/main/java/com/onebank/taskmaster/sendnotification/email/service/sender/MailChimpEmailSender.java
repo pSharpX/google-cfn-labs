@@ -1,5 +1,6 @@
 package com.onebank.taskmaster.sendnotification.email.service.sender;
 
+import com.google.inject.Inject;
 import com.onebank.taskmaster.sendnotification.email.model.mailchimp.SendMessageResponse;
 import com.onebank.taskmaster.sendnotification.email.model.mailchimp.SendMessageWithTemplateRequest;
 import com.onebank.taskmaster.sendnotification.email.provider.mailchimp.MailChimpClient;
@@ -11,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__({@Inject}))
 @Slf4j
 public class MailChimpEmailSender implements EmailSender {
     private final MailChimpClientRequestFactory clientRequestFactory;
