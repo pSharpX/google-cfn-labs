@@ -46,19 +46,15 @@ public class SendGridConfigModule extends AbstractModule {
 
     @Provides
     @Singleton
-    public SendGridClient buildSendGridClient(AppConfigProperties appConfigProperties, SendGridConfigProperties sendGridConfigProperties, ObjectMapper objectMapper) {
-        if (isProviderEnabled(appConfigProperties)) {
-            return Feign.builder()
-                    .client(new OkHttpClient())
-                    .encoder(new JacksonEncoder(objectMapper))
-                    .decoder(new JacksonDecoder(objectMapper))
-                    .requestInterceptor(new SendGridClientRequestInterceptor(sendGridConfigProperties.getApikey()))
-                    .logger(new Slf4jLogger(SendGridClient.class))
-                    .logLevel(Logger.Level.FULL)
-                    .target(SendGridClient.class, sendGridConfigProperties.getBasePath());
-
-        }
-        return null;
+    public SendGridClient buildSendGridClient(SendGridConfigProperties sendGridConfigProperties, ObjectMapper objectMapper) {
+        return Feign.builder()
+                .client(new OkHttpClient())
+                .encoder(new JacksonEncoder(objectMapper))
+                .decoder(new JacksonDecoder(objectMapper))
+                .requestInterceptor(new SendGridClientRequestInterceptor(sendGridConfigProperties.getApikey()))
+                .logger(new Slf4jLogger(SendGridClient.class))
+                .logLevel(Logger.Level.FULL)
+                .target(SendGridClient.class, sendGridConfigProperties.getBasePath());
     }
 
     private boolean isProviderEnabled(AppConfigProperties appConfigProperties) {

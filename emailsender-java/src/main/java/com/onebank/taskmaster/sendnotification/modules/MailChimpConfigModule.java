@@ -5,7 +5,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Scopes;
 import com.google.inject.Singleton;
-import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.onebank.taskmaster.sendnotification.config.AppConfigProperties;
 import com.onebank.taskmaster.sendnotification.config.ConfigProvider;
