@@ -13,4 +13,16 @@ public class ConfigProvider {
     public <T> T getConfig(Class<T> pojoClass) {
         return PropertiesMapper.mapPropertiesToPojo(properties, pojoClass);
     }
+
+    public Properties getConfig(String prefix) {
+        Properties result = new Properties();
+        for (String key : properties.stringPropertyNames()) {
+            if (key.startsWith(prefix)) {
+                // Remove the prefix from the key in the result
+                String subKey = key.substring(prefix.length());
+                result.setProperty(subKey, properties.getProperty(key));
+            }
+        }
+        return result;
+    }
 }
