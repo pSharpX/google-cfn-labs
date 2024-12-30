@@ -27,6 +27,7 @@ repositories {
 
 ext {
 	set('feignVersion', "13.5")
+	set('gcloudVersion', "26.52.0")
 }
 
 dependencies {
@@ -44,9 +45,14 @@ dependencies {
 	implementation 'org.hibernate.validator:hibernate-validator:8.0.0.Final'
 	implementation 'org.glassfish.expressly:expressly:5.0.0'
 
+	implementation 'com.hubspot.jackson:jackson-datatype-protobuf:0.9.17'
+
 	implementation 'io.github.openfeign:feign-okhttp'
 	implementation 'io.github.openfeign:feign-jackson'
 	implementation 'io.github.openfeign:feign-slf4j'
+
+	implementation 'com.google.cloud:google-cloudevent-types:0.16.0'
+	implementation 'com.google.cloud:google-cloud-pubsub'
 
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
@@ -56,6 +62,7 @@ dependencies {
 dependencyManagement {
 	imports {
 		mavenBom "io.github.openfeign:feign-bom:${feignVersion}"
+		mavenBom "com.google.cloud:libraries-bom:${gcloudVersion}"
 	}
 }
 

@@ -5,7 +5,7 @@ import com.onebank.taskmaster.sendnotification.config.InjectorProvider;
 import com.onebank.taskmaster.sendnotification.function.exception.FunctionExceptionHandler;
 import com.onebank.taskmaster.sendnotification.service.NotificationMessageConsumer;
 
-public class SendEmailNotificationFunctionEntryPoint extends SendEmailNotificationFunction {
+public class SendEmailNotificationFunctionEntryPoint extends SendEmailNotificationCloudEventFunction {
     public SendEmailNotificationFunctionEntryPoint() {
         super(InjectorProvider.getInjector().getInstance(NotificationMessageConsumer.class),
                 new FunctionExceptionHandler(),

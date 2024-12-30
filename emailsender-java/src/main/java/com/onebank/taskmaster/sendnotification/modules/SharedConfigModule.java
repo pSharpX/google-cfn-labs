@@ -8,6 +8,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.matcher.Matchers;
+import com.hubspot.jackson.datatype.protobuf.ProtobufModule;
 import com.onebank.taskmaster.sendnotification.function.interceptors.Auditable;
 import com.onebank.taskmaster.sendnotification.function.interceptors.Validated;
 import com.onebank.taskmaster.sendnotification.function.interceptors.logger.LoggerInterceptor;
@@ -25,9 +26,11 @@ public class SharedConfigModule extends AbstractModule {
     @Provides
     @Singleton
     public ObjectMapper provideObjectMapper() {
-        return new ObjectMapper()
+        ObjectMapper objectMapper = new ObjectMapper()
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL)
                 .configure(SerializationFeature.INDENT_OUTPUT, true)
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.registerModule(new ProtobufModule());
+        return objectMapper;
     }
 }
