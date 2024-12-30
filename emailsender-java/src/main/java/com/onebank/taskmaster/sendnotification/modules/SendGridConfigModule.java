@@ -2,10 +2,8 @@ package com.onebank.taskmaster.sendnotification.modules;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
 import com.google.inject.Scopes;
-import com.google.inject.Singleton;
-import com.google.inject.name.Named;
+import com.google.inject.name.Names;
 import com.onebank.taskmaster.sendnotification.config.AppConfigProperties;
 import com.onebank.taskmaster.sendnotification.config.ConfigProvider;
 import com.onebank.taskmaster.sendnotification.email.config.sendgrid.SendGridClientRequestInterceptor;
@@ -27,25 +25,20 @@ import java.util.Properties;
 @RequiredArgsConstructor
 public class SendGridConfigModule extends AbstractModule {
     private final ConfigProvider configProvider;
+    private final ObjectMapper objectMapper;
 
     @Override
     protected void configure() {
         if (isProviderEnabled(configProvider.getConfig(AppConfigProperties.class))) {
-            bind(SendGridConfigProperties.class).toInstance(configProvider.getConfig(SendGridConfigProperties.class));
+            SendGridConfigProperties configProperties = configProvider.getConfig(SendGridConfigProperties.class);
+            bind(Properties.class).annotatedWith(Names.named("sendgridProperties")).toInstance(configProvider.getConfig("task-master.channel.email.sendgrid"));
+            bind(SendGridConfigProperties.class).toInstance(configProperties);
+            bind(SendGridClient.class).toInstance(buildSendGridClient(configProperties, objectMapper));
             bind(SendGridClientRequestFactory.class).in(Scopes.SINGLETON);
             bind(EmailSender.class).to(SendGridEmailSender.class).in(Scopes.SINGLETON);
         }
     }
 
-    @Provides
-    @Singleton
-    @Named("sendgridProperties")
-    public Properties provideSendGridProperties(ConfigProvider configProvider) {
-        return configProvider.getConfig("task-master.channel.email.sendgrid");
-    }
-
-    @Provides
-    @Singleton
     public SendGridClient buildSendGridClient(SendGridConfigProperties sendGridConfigProperties, ObjectMapper objectMapper) {
         return Feign.builder()
                 .client(new OkHttpClient())
