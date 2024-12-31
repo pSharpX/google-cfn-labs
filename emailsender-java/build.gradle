@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'application'
 	id 'io.spring.dependency-management' version '1.1.5'
+	id 'com.gradleup.shadow' version '8.3.5'
 }
 
 group = 'com.onebank.taskmaster.controlplane'
@@ -72,6 +73,10 @@ application {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+shadowJar {
+	mergeServiceFiles()
 }
 
 tasks.register("runFunction", JavaExec) {

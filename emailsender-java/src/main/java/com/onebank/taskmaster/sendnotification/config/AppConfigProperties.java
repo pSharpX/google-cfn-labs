@@ -7,13 +7,13 @@ import lombok.Setter;
 @Setter
 @PropertiesPrefix(value = "task-master")
 public class AppConfigProperties {
-    private Notification notification;
+    private Notification notification = new Notification();
 
     @Getter
     @Setter
     public static class Notification {
-        private boolean enabled;
-        private Consumer consumer;
+        private boolean enabled = false;
+        private Consumer consumer = new Consumer();
     }
 
     @Getter
@@ -21,6 +21,6 @@ public class AppConfigProperties {
     public static class Consumer {
         private String channel;
         private String provider;
-        private boolean provisioned;
+        private boolean provisioned = false;
     }
 }
