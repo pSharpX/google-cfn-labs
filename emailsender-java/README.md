@@ -108,6 +108,7 @@ Install buildpacks (depends on docker/podman) and build function image:
 ### 3.2 Start PubSub emulator (using GCLOUD CLI)
 
 Issue with emulator and function-framework: https://github.com/GoogleCloudPlatform/functions-framework-dotnet/issues/234
+[Fix local development with Pub/Sub emulator](https://github.com/GoogleCloudPlatform/functions-framework-nodejs/pull/272)
 
 In the first terminal, start the Pub/Sub emulator on port 8043 in a local project:
 ```

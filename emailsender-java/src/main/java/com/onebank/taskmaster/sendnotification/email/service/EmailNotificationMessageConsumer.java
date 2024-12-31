@@ -12,11 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor(onConstructor = @__({@Inject}))
 @Slf4j
-@Auditable
 public class EmailNotificationMessageConsumer implements NotificationMessageConsumer {
     private final EmailSender emailSender;
 
     @Override
+    @Auditable
     public void send(@NonNull NotificationMessage message) {
         log.debug("Sending message via sender-provider");
         emailSender.send((EmailNotificationMessage) message);

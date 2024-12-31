@@ -6,6 +6,8 @@ import com.google.inject.Injector;
 import com.onebank.taskmaster.sendnotification.modules.DynamicConfigModule;
 import com.onebank.taskmaster.sendnotification.modules.FunctionConfigModule;
 import com.onebank.taskmaster.sendnotification.modules.MailChimpConfigModule;
+import com.onebank.taskmaster.sendnotification.modules.MailgunConfigModule;
+import com.onebank.taskmaster.sendnotification.modules.MailjetConfigModule;
 import com.onebank.taskmaster.sendnotification.modules.MockConfigModule;
 import com.onebank.taskmaster.sendnotification.modules.SendGridConfigModule;
 import com.onebank.taskmaster.sendnotification.modules.SharedConfigModule;
@@ -25,6 +27,8 @@ public class InjectorProvider {
                 new MockConfigModule(configProvider),
                 new MailChimpConfigModule(configProvider, objectMapper),
                 new SendGridConfigModule(configProvider, objectMapper),
+                new MailgunConfigModule(configProvider, objectMapper),
+                new MailjetConfigModule(configProvider, objectMapper),
                 new FunctionConfigModule()
         );
     }
