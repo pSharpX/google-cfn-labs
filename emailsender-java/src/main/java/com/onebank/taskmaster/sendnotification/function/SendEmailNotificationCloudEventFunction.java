@@ -5,7 +5,7 @@ import com.google.cloud.functions.CloudEventsFunction;
 import com.google.events.cloud.pubsub.v1.MessagePublishedData;
 import com.onebank.taskmaster.sendnotification.exception.BadRequestException;
 import com.onebank.taskmaster.sendnotification.exception.ResourceNotFoundException;
-import com.onebank.taskmaster.sendnotification.function.exception.FunctionExceptionHandler;
+import com.onebank.taskmaster.sendnotification.function.exception.CloudEventFunctionExceptionHandler;
 import com.onebank.taskmaster.sendnotification.model.senders.NotificationMessage;
 import com.onebank.taskmaster.sendnotification.service.NotificationMessageConsumer;
 import io.cloudevents.CloudEvent;
@@ -17,11 +17,11 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class SendEmailNotificationCloudEventFunction implements CloudEventsFunction {
     private final NotificationMessageConsumer notificationMessageConsumer;
-    private final FunctionExceptionHandler exceptionHandler;
+    private final CloudEventFunctionExceptionHandler exceptionHandler;
     private final ObjectMapper objectMapper;
 
     @Override
-    public void accept(CloudEvent event) throws Exception {
+    public void accept(CloudEvent event) {
         try {
             String cloudEventData = new String(Objects.requireNonNull(event.getData()).toBytes(), StandardCharsets.UTF_8);
 
