@@ -1,4 +1,4 @@
-# emailsender-spring-java
+# emailsender-java
 
 ## Introduction
 The emailsender function is responsible for sending email notifications in the tasks management ecosystem.
