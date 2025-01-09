@@ -20,7 +20,7 @@ public class ManageTemplateCloudEventFunction implements CloudEventsFunction {
     public void accept(CloudEvent event) {
         try {
             log.debug("Receiving [{}] event", event.getType());
-            eventHandler.resolve(EventType.getByName(event.getType())).handle(event);
+            eventHandler.resolve(EventType.getByPrefix(event.getType())).handle(event);
         } catch (IllegalArgumentException ex) {
             exceptionHandler.handleBadRequestException(ex);
         } catch (BadRequestException ex) {

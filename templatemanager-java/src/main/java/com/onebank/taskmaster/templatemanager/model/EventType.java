@@ -15,8 +15,8 @@ public enum EventType {
 
     private final String prefix;
 
-    public static EventType getByName(@NonNull String name) {
-        return Stream.of(values()).filter(eventType -> eventType.getPrefix().startsWith(name))
+    public static EventType getByPrefix(@NonNull String name) {
+        return Stream.of(values()).filter(eventType -> name.startsWith(eventType.prefix))
                 .findFirst()
                 .orElse(null);
     }

@@ -2,6 +2,7 @@ package com.onebank.taskmaster.templatemanager.service.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.events.cloud.storage.v1.StorageObjectData;
+import com.onebank.taskmaster.templatemanager.model.SubEventType;
 import io.cloudevents.CloudEvent;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +18,9 @@ public abstract class StorageEventHandler implements EventHandler {
     public void handle(CloudEvent event) throws Exception {
         String cloudEventData = new String(Objects.requireNonNull(event.getData()).toBytes(), StandardCharsets.UTF_8);
         StorageObjectData storageObjectData = objectMapper.readValue(cloudEventData, StorageObjectData.class);
-        this.handle(event.getType(), storageObjectData);
+        this.handle(SubEventType.getByFullName(event.getType()), storageObjectData);
     }
 
-    abstract void handle(@NonNull String eventType, @NonNull StorageObjectData data);
+    abstract void handle(@NonNull SubEventType eventType, @NonNull StorageObjectData data);
 
 }

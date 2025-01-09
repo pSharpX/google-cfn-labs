@@ -21,8 +21,8 @@ public enum SubEventType {
     private final String name;
     private final String fullName;
 
-    public static SubEventType getByName(@NonNull String name) {
-        return Stream.of(values()).filter(eventType -> eventType.getName().equalsIgnoreCase(name))
+    public static SubEventType getByFullName(@NonNull String name) {
+        return Stream.of(values()).filter(eventType -> eventType.getFullName().equalsIgnoreCase(name))
                 .findFirst()
                 .orElse(null);
     }

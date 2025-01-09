@@ -19,7 +19,8 @@ public class StorageEventHandlerService extends StorageEventHandler {
     }
 
     @Override
-    void handle(@NonNull String eventType, @NonNull StorageObjectData data) {
-        actionTemplateResolver.resolve(SubEventType.getByName(eventType)).execute(data);
+    void handle(@NonNull SubEventType eventType, @NonNull StorageObjectData data) {
+        log.debug("Handling Storage [{}] event", eventType.getName());
+        actionTemplateResolver.resolve(eventType).execute(data);
     }
 }
