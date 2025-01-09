@@ -7,7 +7,6 @@ import io.cloudevents.CloudEvent;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 @RequiredArgsConstructor
@@ -16,8 +15,7 @@ public abstract class StorageEventHandler implements EventHandler {
 
     @Override
     public void handle(CloudEvent event) throws Exception {
-        String cloudEventData = new String(Objects.requireNonNull(event.getData()).toBytes(), StandardCharsets.UTF_8);
-        StorageObjectData storageObjectData = objectMapper.readValue(cloudEventData, StorageObjectData.class);
+        StorageObjectData storageObjectData = objectMapper.readValue(Objects.requireNonNull(event.getData()).toBytes(), StorageObjectData.class);
         this.handle(SubEventType.getByFullName(event.getType()), storageObjectData);
     }
 

@@ -94,88 +94,72 @@ podman run -it -p8080:8080 templatemanager
 ```
 Visit the running function by browsing to localhost:8080 (only when function is trigger by http events)
 
-## 3. Run PuSub emulator for local testing (ONLY for CloudEventFunction)
+## 3. Configure Event Sources for CloudEventFunction
+The following tools or resources can be created as event source for invoking cloud function:
+
+### 3.1 Run PuSub emulator for local testing
 You can trigger a function locally using a push message from the Pub/Sub emulator.
 - [Test locally with the Pub/Sub emulator](https://cloud.google.com/functions/docs/local-development)
 
 Make sure you have the pack tool and Docker installed.
 
-### 3.1 Buildpacks
-Install buildpacks (depends on docker/podman) and build function image:
+### 3.2 Run Cloud Storage emulator for local testing
+You can trigger a function locally using a cloud storage emulator.
 
-#### 3.1.1 Installing buildpacks
-- [Installing buidpacks](https://buildpacks.io/docs/for-platform-operators/how-to/integrate-ci/pack/)
+## 4. Testing Cloud Function locally invoking manually
+You can invoke function locally visiting next link http://localhost:8080
 
-### 3.2 Start PubSub emulator (using GCLOUD CLI)
-
-Issue with emulator and function-framework: https://github.com/GoogleCloudPlatform/functions-framework-dotnet/issues/234
-[Fix local development with Pub/Sub emulator](https://github.com/GoogleCloudPlatform/functions-framework-nodejs/pull/272)
-
-In the first terminal, start the Pub/Sub emulator on port 8043 in a local project:
+### 4.1 PubSub as Event Source (LOCAL)
+If you need to emulate message published in a topic use the following request example:
 ```
-gcloud beta emulators pubsub start --project=abc --host-port='localhost:8043'
-```
-
-In the second terminal, create a Pub/Sub topic and subscription:
-```
-curl -s -X PUT 'http://localhost:8043/v1/projects/abc/topics/mytopic'
-```
-Use http://localhost:8080 as the push subscription's endpoint.
-```
-curl -s -X PUT 'http://localhost:8043/v1/projects/abc/subscriptions/mysub' -H 'Content-Type: application/json' --data '{"topic":"projects/abc/topics/mytopic","pushConfig":{"pushEndpoint":"http://localhost:8080/projects/abc/topics/mytopic"}}'
-```
-Make sure the function is running on port 8080. This is where the emulator will send push messages:
-```
-docker run --rm -p 8080:8080 templatemanager
-podman run -it -p8080:8080 templatemanager
-```
-In the second terminal, invoke the function by publishing a message. The message data needs to be encoded in base64. 
-This example uses the base64 encoded json data:
-```
-<your_payload>
-{
-    "id": 1,
-    "channel": "EMAIL",
-    "type": "TASK_CREATED",
-    "user": "your_email",
-    "title": "Learn Terraform",
-    "message": "Learn Terraform from scratch",
-    "recipientName": "your_name",
-    "recipientEmail": "your_email",
-    "templateName": "task-created-template",
-    "vars": {
-        "application_name": "Task Master",
-        "username": "your_name",
-        "current_year": "2025",
-        "task_title": "Learn Terraform",
-        "task_description": "Learn Terraform",
-        "task_due_date": "Learn Terraform",
-        "task_priority": "Learn Terraform"
-    }
-}
-<your_request_payload>
-{
-    "data": {
-        "data": "<your_payload>",
-        "attributes": {
-            "Content-Type": "application/json"
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -H "ce-specversion: 1.0" \
+  -H "ce-type: google.cloud.pubsub.topic.v1.messagePublished" \
+  -H "ce-source: //pubsub.googleapis.com/projects/my-project/topics/my-topic" \
+  -H "ce-id: 1234567890123456" \
+  -H "ce-time: 2024-12-30T16:22:43.946Z" \
+  -d '{
+        "message": {
+            "attributes": {
+                "key1": "value1",
+                "key2": "value2"
+            },
+            "data": "SGVsbG8gd29ybGQh", // Base64-encoded
+            "messageId": "123456789012",
+            "publishTime": "2025-01-01T12:00:00.123Z"
         }
-    },
-    "context": {
-        "eventId": "1",
-        "eventType": "google.pubsub.topic.publish",
-        "resource": {
-            "name": "topic",
-            "service": "pubsub.googleapis.com",
-            "type": "type.googleapis.com/google.pubsub.v1.PubsubMessage"
-        },
-        "timestamp": "2024-12-30T16:22:43.946Z"
-    }
-}
+    }' \
+  http://localhost:8080
 ```
-Now invoke the function by publishing a message:
+
+### 4.2 Cloud Storage as Event Source (LOCAL)
+If you need to emulate cloud storage events use the following request example:
 ```
-curl -s -X POST 'http://localhost:8043/v1/projects/abc/topics/mytopic:publish' -H 'Content-Type: application/json' --data '<your_request_payload>'
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -H "ce-specversion: 1.0" \
+  -H "ce-type: google.cloud.storage.object.v1.finalized" \
+  -H "ce-source: //storage.googleapis.com/{bucket-name" \
+  -H "ce-id: 1234567890123456" \
+  -H "ce-time: 2024-12-30T16:22:43.946Z" \
+  -d '{
+          "bucket": "my-bucket",
+          "contentType": "text/plain",
+          "crc32c": "rTVTeQ==",
+          "etag": "CNHZkbuF/ugCEAE=",
+          "generation": "1579287380533984",
+          "id": "my-bucket/my-file.txt/1579287380533984",
+          "kind": "storage#object",
+          "md5Hash": "HXB937GQDFxDFqUGiKjg==",
+          "mediaLink": "https://storage.googleapis.com/download/storage/v1/b/my-bucket/o/my-file.txt",
+          "name": "my-file.txt",
+          "size": "1024",
+          "storageClass": "STANDARD",
+          "timeCreated": "2025-01-01T12:00:00.123Z",
+          "updated": "2025-01-01T12:00:00.123Z"
+        }' \
+  http://localhost:8080
 ```
 
 ### Build and Test
