@@ -10,6 +10,10 @@ import com.onebank.taskmaster.templatemanager.email.config.mailchimp.MailChimpCl
 import com.onebank.taskmaster.templatemanager.email.config.mailchimp.MailChimpConfigProperties;
 import com.onebank.taskmaster.templatemanager.email.provider.mailchimp.MailChimpClient;
 import com.onebank.taskmaster.templatemanager.email.provider.mailchimp.MailChimpClientRequestFactory;
+import com.onebank.taskmaster.templatemanager.service.manager.CreateOrUpdateMailChimpTemplateService;
+import com.onebank.taskmaster.templatemanager.service.manager.CreateOrUpdateTemplate;
+import com.onebank.taskmaster.templatemanager.service.manager.DeleteMailChimpTemplateService;
+import com.onebank.taskmaster.templatemanager.service.manager.DeleteTemplate;
 import feign.Feign;
 import feign.Logger;
 import feign.jackson.JacksonDecoder;
@@ -33,6 +37,8 @@ public class MailChimpConfigModule extends AbstractModule {
             bind(MailChimpConfigProperties.class).toInstance(configProperties);
             bind(MailChimpClient.class).toInstance(buildMailChimpClient(configProperties, objectMapper));
             bind(MailChimpClientRequestFactory.class).in(Scopes.SINGLETON);
+            bind(CreateOrUpdateTemplate.class).to(CreateOrUpdateMailChimpTemplateService.class).in(Scopes.SINGLETON);
+            bind(DeleteTemplate.class).to(DeleteMailChimpTemplateService.class).in(Scopes.SINGLETON);
         }
     }
 

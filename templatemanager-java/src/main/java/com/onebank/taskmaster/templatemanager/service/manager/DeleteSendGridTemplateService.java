@@ -4,7 +4,7 @@ import com.onebank.taskmaster.templatemanager.model.ActionTemplateDto;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class DeleteTemplateService extends DeleteTemplate {
+public class DeleteSendGridTemplateService extends DeleteTemplate {
 
     @Override
     void execute(ActionTemplateDto actionTemplateDto) {

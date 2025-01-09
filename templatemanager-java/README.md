@@ -2,6 +2,7 @@
 
 ## Introduction
 The templatemanager function is responsible for managing email templates used for the tasks management ecosystem.
+Supported operation like create-or-update and delete are included.
 
 ## Getting Started
 
@@ -76,7 +77,7 @@ value =  "event"
 # value =  "http"
 [[build.env]]
 name = "GOOGLE_FUNCTION_TARGET"
-value =  "com.onebank.taskmaster.sendnotification.function.SendEmailNotificationFunctionEntryPoint"
+value =  "com.onebank.taskmaster.templatemanager.function.ManageTemplateFunctionEntryPoint"
 [build]
 builder = "gcr.io/buildpacks/builder:google-22"
 ```
@@ -84,12 +85,12 @@ builder = "gcr.io/buildpacks/builder:google-22"
 Build image using pack CLI:
 ```
 pack --version
-pack build emailsender
+pack build templatemanager
 ```
 Run a function container image
 ```
-docker run -it -p8080:8080 emailsender
-podman run -it -p8080:8080 emailsender
+docker run -it -p8080:8080 templatemanager
+podman run -it -p8080:8080 templatemanager
 ```
 Visit the running function by browsing to localhost:8080 (only when function is trigger by http events)
 
@@ -125,8 +126,8 @@ curl -s -X PUT 'http://localhost:8043/v1/projects/abc/subscriptions/mysub' -H 'C
 ```
 Make sure the function is running on port 8080. This is where the emulator will send push messages:
 ```
-docker run --rm -p 8080:8080 emailsender
-podman run -it -p8080:8080 emailsender
+docker run --rm -p 8080:8080 templatemanager
+podman run -it -p8080:8080 templatemanager
 ```
 In the second terminal, invoke the function by publishing a message. The message data needs to be encoded in base64. 
 This example uses the base64 encoded json data:

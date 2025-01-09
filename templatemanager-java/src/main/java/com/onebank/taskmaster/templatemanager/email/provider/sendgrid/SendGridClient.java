@@ -23,12 +23,24 @@ public interface SendGridClient {
 	@RequestLine(value = "PATCH /templates/{templateId}")
 	CreateTemplateResponse editTemplate(@Param("templateId") String templateId, UpdateTemplateRequest request);
 
+	@RequestLine(value = "GET /templates/{templateId}")
+	CreateTemplateResponse retrieveSingleTemplate(@Param("templateId") String templateId);
+
+	@RequestLine(value = "DELETE /templates/{templateId}")
+	void deleteTemplate(@Param("templateId") String templateId);
+
 	@RequestLine(value = "POST /templates/{templateId}/versions")
 	TemplateVersionResponse createTemplateVersion(@Param("templateId") String templateId, CreateTemplateVersionRequest request);
+
+	@RequestLine(value = "GET /templates/{templateId}/versions/{versionId}")
+	TemplateVersionResponse retrieveSingleTemplateVersion(@Param("templateId") String templateId, @Param("versionId") String versionId);
 
 	@RequestLine(value = "POST /templates/{templateId}/versions/{versionId}")
 	TemplateVersionResponse editTemplateVersion(@Param("templateId") String templateId, @Param("versionId") String versionId, CreateTemplateVersionRequest request);
 
 	@RequestLine(value = "POST /templates/{templateId}/versions/{versionId}/activate")
 	TemplateVersionResponse activateTemplateVersion(ActivateTemplateRequest request);
+
+	@RequestLine(value = "DELETE /templates/{templateId}/versions/{versionId}")
+	void deleteTemplateVersion(@Param("templateId") String templateId, @Param("versionId") String versionId);
 }

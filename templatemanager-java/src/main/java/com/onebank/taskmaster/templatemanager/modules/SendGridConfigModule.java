@@ -10,6 +10,10 @@ import com.onebank.taskmaster.templatemanager.email.config.sendgrid.SendGridClie
 import com.onebank.taskmaster.templatemanager.email.config.sendgrid.SendGridConfigProperties;
 import com.onebank.taskmaster.templatemanager.email.provider.sendgrid.SendGridClient;
 import com.onebank.taskmaster.templatemanager.email.provider.sendgrid.SendGridClientRequestFactory;
+import com.onebank.taskmaster.templatemanager.service.manager.CreateOrUpdateSendGridTemplateService;
+import com.onebank.taskmaster.templatemanager.service.manager.CreateOrUpdateTemplate;
+import com.onebank.taskmaster.templatemanager.service.manager.DeleteSendGridTemplateService;
+import com.onebank.taskmaster.templatemanager.service.manager.DeleteTemplate;
 import feign.Feign;
 import feign.Logger;
 import feign.jackson.JacksonDecoder;
@@ -33,6 +37,8 @@ public class SendGridConfigModule extends AbstractModule {
             bind(SendGridConfigProperties.class).toInstance(configProperties);
             bind(SendGridClient.class).toInstance(buildSendGridClient(configProperties, objectMapper));
             bind(SendGridClientRequestFactory.class).in(Scopes.SINGLETON);
+            bind(CreateOrUpdateTemplate.class).to(CreateOrUpdateSendGridTemplateService.class).in(Scopes.SINGLETON);
+            bind(DeleteTemplate.class).to(DeleteSendGridTemplateService.class).in(Scopes.SINGLETON);
         }
     }
 
