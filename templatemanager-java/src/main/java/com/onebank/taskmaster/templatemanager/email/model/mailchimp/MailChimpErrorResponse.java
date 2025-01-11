@@ -1,12 +1,13 @@
 package com.onebank.taskmaster.templatemanager.email.model.mailchimp;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
-public class PublishTemplateRequest extends MailChimpBaseRequest {
+public class MailChimpErrorResponse {
+    private String status;
+    private Integer code;
     private String name;
+    private String message;
 }

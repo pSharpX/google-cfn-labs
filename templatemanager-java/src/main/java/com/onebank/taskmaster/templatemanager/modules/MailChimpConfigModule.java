@@ -9,6 +9,7 @@ import com.onebank.taskmaster.templatemanager.config.ConfigProvider;
 import com.onebank.taskmaster.templatemanager.email.config.mailchimp.MailChimpClientRequestInterceptor;
 import com.onebank.taskmaster.templatemanager.email.config.mailchimp.MailChimpConfigProperties;
 import com.onebank.taskmaster.templatemanager.email.provider.mailchimp.MailChimpClient;
+import com.onebank.taskmaster.templatemanager.email.provider.mailchimp.MailChimpClientErrorDecoder;
 import com.onebank.taskmaster.templatemanager.email.provider.mailchimp.MailChimpClientRequestFactory;
 import com.onebank.taskmaster.templatemanager.service.manager.CreateOrUpdateMailChimpTemplateService;
 import com.onebank.taskmaster.templatemanager.service.manager.CreateOrUpdateTemplate;
@@ -47,6 +48,7 @@ public class MailChimpConfigModule extends AbstractModule {
                 .client(new OkHttpClient())
                 .encoder(new JacksonEncoder(objectMapper))
                 .decoder(new JacksonDecoder(objectMapper))
+                .errorDecoder(new MailChimpClientErrorDecoder(objectMapper))
                 .requestInterceptor(new MailChimpClientRequestInterceptor(mailChimpConfigProperties.getApikey()))
                 .logger(new Slf4jLogger(MailChimpClient.class))
                 .logLevel(Logger.Level.FULL)
