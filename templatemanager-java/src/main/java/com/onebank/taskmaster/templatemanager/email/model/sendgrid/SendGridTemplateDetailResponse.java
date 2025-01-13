@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class CreateTemplateResponse {
+public class SendGridTemplateDetailResponse {
     private String id;
     private String name;
     private String generation;

@@ -1,9 +1,9 @@
 package com.onebank.taskmaster.templatemanager.email.provider.sendgrid;
 
-import com.onebank.taskmaster.templatemanager.email.model.sendgrid.ActivateTemplateRequest;
 import com.onebank.taskmaster.templatemanager.email.model.sendgrid.CreateTemplateRequest;
-import com.onebank.taskmaster.templatemanager.email.model.sendgrid.CreateTemplateResponse;
+import com.onebank.taskmaster.templatemanager.email.model.sendgrid.SendGridTemplateDetailResponse;
 import com.onebank.taskmaster.templatemanager.email.model.sendgrid.CreateTemplateVersionRequest;
+import com.onebank.taskmaster.templatemanager.email.model.sendgrid.GetTemplatesResponse;
 import com.onebank.taskmaster.templatemanager.email.model.sendgrid.SendMessageRequest;
 import com.onebank.taskmaster.templatemanager.email.model.sendgrid.TemplateVersionResponse;
 import com.onebank.taskmaster.templatemanager.email.model.sendgrid.UpdateTemplateRequest;
@@ -18,13 +18,16 @@ public interface SendGridClient {
 	void send(SendMessageRequest request);
 
 	@RequestLine(value = "POST /templates")
-	CreateTemplateResponse createTemplate(CreateTemplateRequest request);
+	SendGridTemplateDetailResponse createTemplate(CreateTemplateRequest request);
 
 	@RequestLine(value = "PATCH /templates/{templateId}")
-	CreateTemplateResponse editTemplate(@Param("templateId") String templateId, UpdateTemplateRequest request);
+	SendGridTemplateDetailResponse editTemplate(@Param("templateId") String templateId, UpdateTemplateRequest request);
 
 	@RequestLine(value = "GET /templates/{templateId}")
-	CreateTemplateResponse retrieveSingleTemplate(@Param("templateId") String templateId);
+	SendGridTemplateDetailResponse retrieveSingleTemplate(@Param("templateId") String templateId);
+
+	@RequestLine(value = "GET /templates?generations={generation}")
+	GetTemplatesResponse retrieveTemplates(@Param("generation") String generation);
 
 	@RequestLine(value = "DELETE /templates/{templateId}")
 	void deleteTemplate(@Param("templateId") String templateId);
@@ -35,11 +38,11 @@ public interface SendGridClient {
 	@RequestLine(value = "GET /templates/{templateId}/versions/{versionId}")
 	TemplateVersionResponse retrieveSingleTemplateVersion(@Param("templateId") String templateId, @Param("versionId") String versionId);
 
-	@RequestLine(value = "POST /templates/{templateId}/versions/{versionId}")
+	@RequestLine(value = "PATCH /templates/{templateId}/versions/{versionId}")
 	TemplateVersionResponse editTemplateVersion(@Param("templateId") String templateId, @Param("versionId") String versionId, CreateTemplateVersionRequest request);
 
 	@RequestLine(value = "POST /templates/{templateId}/versions/{versionId}/activate")
-	TemplateVersionResponse activateTemplateVersion(ActivateTemplateRequest request);
+	TemplateVersionResponse activateTemplateVersion(@Param("templateId") String templateId, @Param("versionId") String versionId);
 
 	@RequestLine(value = "DELETE /templates/{templateId}/versions/{versionId}")
 	void deleteTemplateVersion(@Param("templateId") String templateId, @Param("versionId") String versionId);

@@ -17,4 +17,11 @@ public class CreateTemplateVersionRequest {
     private String subject;
     private String editor;
     private String testData;
+
+    public CreateTemplateVersionRequest(Integer active, String name, String htmlContent, String subject) {
+        this.active = active;
+        this.name =name;
+        this.htmlContent = htmlContent;
+        this.subject = subject;
+    }
 }

@@ -11,4 +11,9 @@ import lombok.Setter;
 public class CreateTemplateRequest {
     private String name;
     private String generation;
+
+    public CreateTemplateRequest(String name, String generation) {
+        this.name = name;
+        this.generation = generation;
+    }
 }

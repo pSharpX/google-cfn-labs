@@ -17,6 +17,8 @@ task-master.channel.email.sendgrid.url=https://api.sendgrid.com
 task-master.channel.email.sendgrid.apiVersion=/v3
 task-master.channel.email.sendgrid.basePath=https://api.sendgrid.com/v3
 task-master.channel.email.sendgrid.apikey=
+task-master.channel.email.sendgrid.templateGeneration=dynamic
+task-master.channel.email.sendgrid.defaultSubject=default_subject
 task-master.channel.email.sendgrid.from.email=
 task-master.channel.email.sendgrid.from.name=
 
