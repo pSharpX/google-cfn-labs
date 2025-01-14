@@ -19,7 +19,8 @@ public class GoogleConfigModule extends AbstractModule {
     @Override
     protected void configure() {
         AppConfigProperties appConfigProperties = configProvider.getConfig(AppConfigProperties.class);
-        if (!appConfigProperties.getNotification().isEnabled()) {
+        if (!appConfigProperties.isEnabled()
+                || !appConfigProperties.getTemplate().getStorage().isEnabled()) {
            return;
         }
 
@@ -38,10 +39,10 @@ public class GoogleConfigModule extends AbstractModule {
 
     private GoogleCredentials resolveGoogleCredentials(AppConfigProperties appConfigProperties) {
         try {
-            if (enableDefaultCredentials(appConfigProperties.getNotification().getTemplate().getStorage())) {
+            if (enableDefaultCredentials(appConfigProperties.getTemplate().getStorage())) {
                 return defaultGoogleCredentials();
             } else {
-                return fixedGoogleCredentials(appConfigProperties.getNotification().getTemplate().getStorage());
+                return fixedGoogleCredentials(appConfigProperties.getTemplate().getStorage());
             }
         } catch (IOException exception) {
             throw new InternalServerException(ExceptionConstantsUtils.INTERNAL_SERVER_ERROR, exception.getMessage());

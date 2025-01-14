@@ -57,7 +57,7 @@ public class SendGridConfigModule extends AbstractModule {
     }
 
     private boolean isProviderEnabled(AppConfigProperties appConfigProperties) {
-        return appConfigProperties.getNotification().isEnabled()
-                && "sendgrid".equalsIgnoreCase(appConfigProperties.getNotification().getTemplate().getProvider());
+        return appConfigProperties.isEnabled()
+                && "sendgrid".equalsIgnoreCase(appConfigProperties.getTemplate().getProvider());
     }
 }

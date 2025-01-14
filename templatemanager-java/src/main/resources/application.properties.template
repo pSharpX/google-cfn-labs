@@ -22,7 +22,7 @@ task-master.channel.email.sendgrid.defaultSubject=default_subject
 task-master.channel.email.sendgrid.from.email=
 task-master.channel.email.sendgrid.from.name=
 
-
+task-master.notification.template.storage.enabled=false
 task-master.notification.template.storage.projectId=
 task-master.notification.template.storage.locationId=
 task-master.notification.template.storage.serviceAccountKeyPath=

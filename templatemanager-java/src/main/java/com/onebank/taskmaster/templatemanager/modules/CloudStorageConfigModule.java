@@ -16,8 +16,8 @@ public class CloudStorageConfigModule extends AbstractModule {
     @Override
     protected void configure() {
         AppConfigProperties appConfigProperties = configProvider.getConfig(AppConfigProperties.class);
-        if (appConfigProperties.getNotification().isEnabled()) {
-            bind(Storage.class).toInstance(buildStorageService(appConfigProperties.getNotification().getTemplate().getStorage(), googleCredentials));
+        if (appConfigProperties.isEnabled()) {
+            bind(Storage.class).toInstance(buildStorageService(appConfigProperties.getTemplate().getStorage(), googleCredentials));
         }
     }
 

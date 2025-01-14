@@ -17,10 +17,13 @@ public class MockConfigModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        if (!configProvider.getConfig(AppConfigProperties.class).getNotification().isEnabled()) {
+        AppConfigProperties appConfigProperties = configProvider.getConfig(AppConfigProperties.class);
+        if (!appConfigProperties.isEnabled()) {
             bind(GetObjectContent.class).toInstance(mockGetObjectContent());
             bind(CreateOrUpdateTemplate.class).to(CreateOrUpdateMockTemplateService.class).in(Scopes.SINGLETON);
             bind(DeleteTemplate.class).to(DeleteMockTemplateService.class).in(Scopes.SINGLETON);
+        } else if (!appConfigProperties.getTemplate().getStorage().isEnabled()) {
+            bind(GetObjectContent.class).toInstance(mockGetObjectContent());
         }
     }
 

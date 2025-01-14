@@ -5,16 +5,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@PropertiesPrefix(value = "task-master")
+@PropertiesPrefix(value = "task-master.notification")
 public class AppConfigProperties {
-    private Notification notification = new Notification();
-
-    @Getter
-    @Setter
-    public static class Notification {
-        private boolean enabled = false;
-        private Template template = new Template();
-    }
+    private boolean enabled = false;
+    private Template template = new Template();
 
     @Getter
     @Setter
@@ -26,6 +20,7 @@ public class AppConfigProperties {
     @Getter
     @Setter
     public static class Storage {
+        private boolean enabled = false;
         private String projectId;
         private String locationId;
         private String serviceAccountKeyPath;

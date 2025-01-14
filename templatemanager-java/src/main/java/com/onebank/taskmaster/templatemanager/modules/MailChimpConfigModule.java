@@ -57,7 +57,7 @@ public class MailChimpConfigModule extends AbstractModule {
     }
 
     private boolean isProviderEnabled(AppConfigProperties appConfigProperties) {
-        return appConfigProperties.getNotification().isEnabled()
-                && "mailchimp".equalsIgnoreCase(appConfigProperties.getNotification().getTemplate().getProvider());
+        return appConfigProperties.isEnabled()
+                && "mailchimp".equalsIgnoreCase(appConfigProperties.getTemplate().getProvider());
     }
 }
