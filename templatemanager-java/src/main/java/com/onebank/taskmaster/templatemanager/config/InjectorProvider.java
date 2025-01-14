@@ -6,11 +6,14 @@ import com.google.inject.Injector;
 import com.onebank.taskmaster.templatemanager.modules.DynamicConfigModule;
 import com.onebank.taskmaster.templatemanager.modules.FunctionConfigModule;
 import com.onebank.taskmaster.templatemanager.modules.GoogleConfigModule;
+import com.onebank.taskmaster.templatemanager.modules.LogbookConfigModule;
 import com.onebank.taskmaster.templatemanager.modules.MailChimpConfigModule;
 import com.onebank.taskmaster.templatemanager.modules.MockConfigModule;
+import com.onebank.taskmaster.templatemanager.modules.OkHttpClientConfigModule;
 import com.onebank.taskmaster.templatemanager.modules.SendGridConfigModule;
 import com.onebank.taskmaster.templatemanager.modules.SharedConfigModule;
 import lombok.Getter;
+import okhttp3.OkHttpClient;
 
 public class InjectorProvider {
     @Getter
@@ -22,10 +25,15 @@ public class InjectorProvider {
                 new SharedConfigModule());
         ConfigProvider configProvider = parentInjector.getInstance(ConfigProvider.class);
         ObjectMapper objectMapper = parentInjector.getInstance(ObjectMapper.class);
-        injector = parentInjector.createChildInjector(
+        Injector intermediateInjector = parentInjector.createChildInjector(
+                new LogbookConfigModule(configProvider),
+                new OkHttpClientConfigModule()
+        );
+        OkHttpClient okHttpClient = intermediateInjector.getInstance(OkHttpClient.class);
+        injector = intermediateInjector.createChildInjector(
                 new MockConfigModule(configProvider),
-                new MailChimpConfigModule(configProvider, objectMapper),
-                new SendGridConfigModule(configProvider, objectMapper),
+                new MailChimpConfigModule(configProvider, objectMapper, okHttpClient),
+                new SendGridConfigModule(configProvider, objectMapper, okHttpClient),
                 new GoogleConfigModule(configProvider),
                 new FunctionConfigModule()
         );
