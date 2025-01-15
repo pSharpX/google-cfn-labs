@@ -1,5 +1,6 @@
 package com.onebank.taskmaster.templatemanager.service.manager;
 
+import com.google.inject.Inject;
 import com.onebank.taskmaster.templatemanager.email.model.mailchimp.GetTemplateInfoRequest;
 import com.onebank.taskmaster.templatemanager.email.model.mailchimp.TemplateDetailResponse;
 import com.onebank.taskmaster.templatemanager.email.provider.mailchimp.MailChimpClient;
@@ -8,7 +9,7 @@ import com.onebank.taskmaster.templatemanager.model.ActionTemplateDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__({@Inject}))
 @Slf4j
 public class DeleteMailChimpTemplateService extends DeleteTemplate {
     private final MailChimpClient mailChimpClient;

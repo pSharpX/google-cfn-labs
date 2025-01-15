@@ -50,7 +50,7 @@ public class GoogleConfigModule extends AbstractModule {
     }
 
     private boolean enableDefaultCredentials(AppConfigProperties.Storage storage) {
-        return Optional.of(storage.getServiceAccountKeyPath())
+        return Optional.ofNullable(storage.getServiceAccountKeyPath())
                 .orElse("").isBlank();
     }
 }

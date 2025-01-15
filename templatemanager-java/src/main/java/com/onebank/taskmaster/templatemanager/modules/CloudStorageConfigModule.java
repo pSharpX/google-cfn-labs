@@ -4,8 +4,11 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import com.google.inject.AbstractModule;
+import com.google.inject.Scopes;
 import com.onebank.taskmaster.templatemanager.config.AppConfigProperties;
 import com.onebank.taskmaster.templatemanager.config.ConfigProvider;
+import com.onebank.taskmaster.templatemanager.service.storage.DefaultGetObjectContentService;
+import com.onebank.taskmaster.templatemanager.service.storage.GetObjectContent;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -16,9 +19,8 @@ public class CloudStorageConfigModule extends AbstractModule {
     @Override
     protected void configure() {
         AppConfigProperties appConfigProperties = configProvider.getConfig(AppConfigProperties.class);
-        if (appConfigProperties.isEnabled()) {
-            bind(Storage.class).toInstance(buildStorageService(appConfigProperties.getTemplate().getStorage(), googleCredentials));
-        }
+        bind(Storage.class).toInstance(buildStorageService(appConfigProperties.getTemplate().getStorage(), googleCredentials));
+        bind(GetObjectContent.class).to(DefaultGetObjectContentService.class).in(Scopes.SINGLETON);
     }
 
     public Storage buildStorageService(AppConfigProperties.Storage storage, GoogleCredentials googleCredentials) {

@@ -1,5 +1,6 @@
 package com.onebank.taskmaster.templatemanager.function;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.cloud.functions.HttpFunction;
 import com.google.cloud.functions.HttpRequest;
@@ -11,12 +12,16 @@ import com.onebank.taskmaster.templatemanager.function.model.GenericMessage;
 import com.onebank.taskmaster.templatemanager.function.model.Message;
 import com.onebank.taskmaster.templatemanager.function.model.MessageBuilder;
 import com.onebank.taskmaster.templatemanager.helper.FunctionUtils;
+import com.onebank.taskmaster.templatemanager.service.handler.EventHandlerResolver;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.net.HttpURLConnection;
 
 @RequiredArgsConstructor
+@Slf4j
 public class ManageTemplateFunction implements HttpFunction {
+    private final EventHandlerResolver eventHandler;
     private final FunctionExceptionHandler exceptionHandler;
     private final ObjectMapper objectMapper;
 
@@ -30,7 +35,9 @@ public class ManageTemplateFunction implements HttpFunction {
             response.setStatusCode(HttpURLConnection.HTTP_NO_CONTENT);
             return;
         }
-
+        JsonNode requestBody = objectMapper.readValue(request.getReader(), JsonNode.class);
+        String content = objectMapper.writeValueAsString(requestBody);
+        log.debug("Request Body = {}, Request Headers = {}", content, request.getHeaders());
         Message<String> message = new GenericMessage<>();
         response.appendHeader("Content-Type", "application/json");
         try {
