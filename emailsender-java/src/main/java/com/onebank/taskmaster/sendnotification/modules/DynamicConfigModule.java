@@ -19,6 +19,7 @@ public class DynamicConfigModule extends AbstractModule {
     @Singleton
     public Properties provideProperties() {
         Properties allProperties = new Properties();
+        allProperties.putAll(PropertiesLoader.loadEnvironmentVariablesAsPropertiesNameStyle());
         allProperties.putAll(PropertiesLoader.loadProperties(propertiesFilePath));
         allProperties.putAll(PropertiesLoader.loadEnvironmentVariables());
         return allProperties;

@@ -28,4 +28,21 @@ public class PropertiesLoader {
         }
         return properties;
     }
+
+    public static Properties loadEnvironmentVariablesAsPropertiesNameStyle() {
+        // Get environment variables
+        Map<String, String> env = System.getenv();
+        Properties properties = new Properties();
+        for (Map.Entry<String, String> entry : env.entrySet()) {
+            String propName = convertToPropertyName(entry.getKey());
+            properties.setProperty(propName, entry.getValue());
+        }
+        return properties;
+    }
+
+    // Method to convert environment variable name to property name style
+    private static String convertToPropertyName(String envVarName) {
+        // Convert to lowercase and replace underscores with dots
+        return envVarName.toLowerCase().replace('_', '.');
+    }
 }
