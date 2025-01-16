@@ -12,7 +12,7 @@ public abstract class DeleteTemplate implements ActionTemplate {
 
     @Override
     public void execute(StorageObjectData objectData) {
-        log.debug("Processing CreateOrUpdateAction for [{}] template", objectData.getName());
+        log.debug("Processing DeleteAction for [{}] template", objectData.getName());
         ActionTemplateDto actionTemplateDto = new ActionTemplateDto(ActionTemplateType.DELETE,
                 objectData.getName(), objectData.getBucket(), null, objectData.getContentType(), objectData.getSize());
 
