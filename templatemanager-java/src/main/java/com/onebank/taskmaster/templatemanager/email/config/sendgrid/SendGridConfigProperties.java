@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @PropertiesPrefix(value = "task-master.channel.email.sendgrid")
-public class SendGridConfigProperties {
+public final class SendGridConfigProperties {
     private String url;
     private String apiVersion;
     private String basePath;

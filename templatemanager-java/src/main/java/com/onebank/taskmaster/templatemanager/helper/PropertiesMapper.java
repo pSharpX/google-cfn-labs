@@ -34,8 +34,7 @@ public class PropertiesMapper {
             for (Field field : clazz.getDeclaredFields()) {
                 field.setAccessible(true); // Make the field accessible
 
-                //String fieldName = field.getName();
-                String fieldName = normalizePropertyName(field.getName());
+                String fieldName = field.getName();
                 String propertyName = prefix + fieldName;
 
                 if (isPrimitiveOrWrapper(field.getType()) || field.getType() == String.class) {
@@ -144,34 +143,6 @@ public class PropertiesMapper {
             }
         }
         return nestedProperties;
-    }
-
-    /**
-     * Normalizes a property name by converting camelCase, underscores, and dashes to a consistent format.
-     *
-     * @param propertyName the property name to normalize
-     * @return the normalized property name
-     */
-    private static String normalizePropertyName(String propertyName) {
-        return propertyName
-                .replaceAll("([a-z])([A-Z])", "$1-$2") // Convert camelCase to kebab-case
-                .toLowerCase();
-    }
-
-    /**
-     * Finds a property value from the properties object by handling naming differences.
-     *
-     * @param properties   the properties object
-     * @param propertyName the normalized property name
-     * @return the property value, or null if not found
-     */
-    private static String findProperty(Properties properties, String propertyName) {
-        for (String key : properties.stringPropertyNames()) {
-            if (normalizePropertyName(key).equals(propertyName)) {
-                return properties.getProperty(key);
-            }
-        }
-        return null;
     }
 
     /**

@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @PropertiesPrefix(value = "task-master.notification")
-public class AppConfigProperties {
+public final class AppConfigProperties {
     private boolean enabled = false;
     private Template template = new Template();
 

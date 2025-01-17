@@ -8,6 +8,6 @@ import java.util.Map;
 @Getter
 @Setter
 @PropertiesPrefix(value = "task-master.channel")
-public class EmailChannelConfigProperties {
+public final class EmailChannelConfigProperties {
     private Map<String, Object> email;
 }

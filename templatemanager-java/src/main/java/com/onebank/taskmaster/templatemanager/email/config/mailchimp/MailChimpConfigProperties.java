@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @PropertiesPrefix(value = "task-master.channel.email.mailchimp")
-public class MailChimpConfigProperties {
+public final class MailChimpConfigProperties {
     private String url;
     private String apiVersion;
     private String basePath;
