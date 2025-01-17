@@ -52,7 +52,7 @@ public class SendGridConfigModule extends AbstractModule {
                 .errorDecoder(new SendGridClientErrorDecoder(objectMapper))
                 .requestInterceptor(new SendGridClientRequestInterceptor(sendGridConfigProperties.getApikey()))
                 .logger(new Slf4jLogger(SendGridClient.class))
-                .logLevel(Logger.Level.FULL)
+                .logLevel(Logger.Level.valueOf(sendGridConfigProperties.getLogger().getLevel()))
                 .target(SendGridClient.class, sendGridConfigProperties.getBasePath());
     }
 

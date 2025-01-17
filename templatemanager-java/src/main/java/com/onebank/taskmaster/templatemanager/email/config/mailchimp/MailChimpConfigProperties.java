@@ -14,6 +14,7 @@ public class MailChimpConfigProperties {
     private String apikey;
     private Config config;
     private From from;
+    private Logger logger;
 
     @Getter
     @Setter
@@ -26,5 +27,11 @@ public class MailChimpConfigProperties {
     public static class From {
         private String email;
         private String name;
+    }
+
+    @Getter
+    @Setter
+    public static class Logger {
+        private String level  = "FULL";
     }
 }

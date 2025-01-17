@@ -13,11 +13,18 @@ public class SendGridConfigProperties {
     private String basePath;
     private String apikey;
     private From from;
+    private Logger logger;
 
     @Getter
     @Setter
     public static class From {
         private String email;
         private String name;
+    }
+
+    @Getter
+    @Setter
+    public static class Logger {
+        private String level  = "FULL";
     }
 }

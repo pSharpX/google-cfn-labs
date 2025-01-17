@@ -52,7 +52,7 @@ public class MailChimpConfigModule extends AbstractModule {
                 .errorDecoder(new MailChimpClientErrorDecoder(objectMapper))
                 .requestInterceptor(new MailChimpClientRequestInterceptor(mailChimpConfigProperties.getApikey()))
                 .logger(new Slf4jLogger(MailChimpClient.class))
-                .logLevel(Logger.Level.FULL)
+                .logLevel(Logger.Level.valueOf(mailChimpConfigProperties.getLogger().getLevel()))
                 .target(MailChimpClient.class, mailChimpConfigProperties.getBasePath());
     }
 

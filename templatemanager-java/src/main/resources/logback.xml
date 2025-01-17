@@ -7,8 +7,9 @@
         </encoder>
     </appender>
 
-    <logger name="com.onebank.taskmaster.templatemanager.*" level="INFO" />
-    <root level="DEBUG">
+    <logger name="org.zalando.logbook" level="TRACE" />
+    <logger name="com.onebank.taskmaster.templatemanager" level="DEBUG" />
+    <root level="WARN">
         <appender-ref ref="CONSOLE" />
     </root>
 </configuration>

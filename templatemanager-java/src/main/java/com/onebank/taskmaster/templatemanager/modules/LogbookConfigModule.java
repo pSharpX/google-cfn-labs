@@ -48,6 +48,7 @@ public class LogbookConfigModule extends AbstractModule {
             final AttributeExtractor attributeExtractor,
             final Sink sink
     ) {
+        Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
         return Logbook.builder()
                 .correlationId(correlationId)
                 .requestFilters(List.of(requestFilter))
