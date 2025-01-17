@@ -55,6 +55,7 @@ dependencies {
 	implementation 'org.zalando:logbook-core'
 	implementation 'org.zalando:logbook-json'
 	implementation 'org.zalando:logbook-okhttp'
+	implementation 'org.zalando:logbook-servlet'
 
 	implementation 'com.google.cloud:google-cloudevent-types:0.16.0'
 	implementation 'com.google.cloud:google-cloud-pubsub'

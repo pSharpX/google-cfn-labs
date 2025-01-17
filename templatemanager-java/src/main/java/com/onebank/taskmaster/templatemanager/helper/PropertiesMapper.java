@@ -5,6 +5,10 @@ import lombok.experimental.UtilityClass;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 @UtilityClass
@@ -30,7 +34,8 @@ public class PropertiesMapper {
             for (Field field : clazz.getDeclaredFields()) {
                 field.setAccessible(true); // Make the field accessible
 
-                String fieldName = field.getName();
+                //String fieldName = field.getName();
+                String fieldName = normalizePropertyName(field.getName());
                 String propertyName = prefix + fieldName;
 
                 if (isPrimitiveOrWrapper(field.getType()) || field.getType() == String.class) {
@@ -39,6 +44,23 @@ public class PropertiesMapper {
                     if (propertyValue != null) {
                         Object value = convertValue(propertyValue, field.getType());
                         field.set(pojo, value);
+                    }
+                } else if (List.class.isAssignableFrom(field.getType())) {
+                    // Handle list fields
+                    Type genericType = field.getGenericType();
+                    if (genericType instanceof ParameterizedType parameterizedType) {
+
+                        Class<?> listItemClass = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+
+                        if (isPrimitiveOrWrapper(listItemClass) || listItemClass == String.class) {
+                            // List of primitives or strings
+                            List<Object> list = mapPrimitiveList(properties, propertyName, listItemClass);
+                            field.set(pojo, list);
+                        } else {
+                            // List of POJOs
+                            List<Object> list = mapListProperties(properties, propertyName, listItemClass);
+                            field.set(pojo, list);
+                        }
                     }
                 } else {
                     // Handle nested objects
@@ -54,6 +76,55 @@ public class PropertiesMapper {
                  IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException("Failed to map properties to POJO", e);
         }
+    }
+
+    /**
+     * Maps a list of properties with the same prefix into a list of POJOs.
+     *
+     * @param properties  the properties object
+     * @param prefix      the prefix for the list items
+     * @param listItemClass the class of the list items
+     * @return a list of mapped POJOs
+     */
+    private static List<Object> mapListProperties(Properties properties, String prefix, Class<?> listItemClass) {
+        List<Object> list = new ArrayList<>();
+        int index = 0;
+
+        while (true) {
+            String indexedPrefix = prefix + "[" + index + "]";
+            Properties nestedProperties = extractNestedProperties(properties, indexedPrefix);
+            if (nestedProperties.isEmpty()) {
+                break;
+            }
+            Object item = mapPropertiesToPojo(nestedProperties, listItemClass);
+            list.add(item);
+            index++;
+        }
+        return list;
+    }
+
+    /**
+     * Maps a list of primitive properties with the same prefix.
+     *
+     * @param properties the properties object
+     * @param prefix     the prefix for the list items
+     * @param itemClass  the class of the list items
+     * @return a list of mapped primitive values
+     */
+    private static List<Object> mapPrimitiveList(Properties properties, String prefix, Class<?> itemClass) {
+        List<Object> list = new ArrayList<>();
+        int index = 0;
+
+        while (true) {
+            String indexedKey = prefix + "[" + index + "]";
+            String propertyValue = properties.getProperty(indexedKey);
+            if (propertyValue == null) {
+                break;
+            }
+            list.add(convertValue(propertyValue, itemClass));
+            index++;
+        }
+        return list;
     }
 
     /**
@@ -73,6 +144,34 @@ public class PropertiesMapper {
             }
         }
         return nestedProperties;
+    }
+
+    /**
+     * Normalizes a property name by converting camelCase, underscores, and dashes to a consistent format.
+     *
+     * @param propertyName the property name to normalize
+     * @return the normalized property name
+     */
+    private static String normalizePropertyName(String propertyName) {
+        return propertyName
+                .replaceAll("([a-z])([A-Z])", "$1-$2") // Convert camelCase to kebab-case
+                .toLowerCase();
+    }
+
+    /**
+     * Finds a property value from the properties object by handling naming differences.
+     *
+     * @param properties   the properties object
+     * @param propertyName the normalized property name
+     * @return the property value, or null if not found
+     */
+    private static String findProperty(Properties properties, String propertyName) {
+        for (String key : properties.stringPropertyNames()) {
+            if (normalizePropertyName(key).equals(propertyName)) {
+                return properties.getProperty(key);
+            }
+        }
+        return null;
     }
 
     /**
