@@ -18,6 +18,7 @@ import org.zalando.logbook.json.JsonHttpLogFormatter;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
@@ -142,7 +143,15 @@ public class LogbookConfigModule extends AbstractModule {
 
     @Provides
     @Singleton
-    public Sink sink(final HttpLogFormatter formatter, final HttpLogWriter writer) {
+    public Sink sink(
+            final @Named("logbookProperties") Properties config,
+            final HttpLogFormatter formatter,
+            final HttpLogWriter writer) {
+        Sink defaultSink = new DefaultSink(formatter, writer);
+        String chunkSize = config.getProperty("write.chunk-size");
+        if (Objects.nonNull(chunkSize)) {
+            return new ChunkingSink(defaultSink, Integer.parseInt(chunkSize));
+        }
         return new DefaultSink(formatter, writer);
     }
 
@@ -181,7 +190,6 @@ public class LogbookConfigModule extends AbstractModule {
     @Provides
     @Singleton
     public BodyFilter jsonBodyFieldsFilter(final LogbookProperties properties) {
-        //BodyFilters.defaultValue();
         final LogbookProperties.Obfuscate obfuscate = properties.getObfuscate();
         final List<String> jsonBodyFields = obfuscate.getJsonBodyFields();
         if (jsonBodyFields.isEmpty()) {
