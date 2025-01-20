@@ -22,15 +22,13 @@ public class InjectorProvider {
     static {
         Injector parentInjector = Guice.createInjector(
                 new DynamicConfigModule("application.properties"),
-                new SharedConfigModule());
+                new SharedConfigModule(),
+                new LogbookConfigModule(),
+                new OkHttpClientConfigModule());
         ConfigProvider configProvider = parentInjector.getInstance(ConfigProvider.class);
         ObjectMapper objectMapper = parentInjector.getInstance(ObjectMapper.class);
-        Injector intermediateInjector = parentInjector.createChildInjector(
-                new LogbookConfigModule(configProvider),
-                new OkHttpClientConfigModule()
-        );
-        OkHttpClient okHttpClient = intermediateInjector.getInstance(OkHttpClient.class);
-        injector = intermediateInjector.createChildInjector(
+        OkHttpClient okHttpClient = parentInjector.getInstance(OkHttpClient.class);
+        injector = parentInjector.createChildInjector(
                 new MockConfigModule(configProvider),
                 new MailChimpConfigModule(configProvider, objectMapper, okHttpClient),
                 new SendGridConfigModule(configProvider, objectMapper, okHttpClient),

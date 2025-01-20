@@ -30,7 +30,6 @@ import static org.zalando.logbook.core.QueryFilters.replaceQuery;
 @Slf4j
 @RequiredArgsConstructor
 public class LogbookConfigModule extends AbstractModule {
-    private final ConfigProvider configProvider;
 
     @Provides
     @Singleton
@@ -41,7 +40,7 @@ public class LogbookConfigModule extends AbstractModule {
     @Provides
     @Singleton
     @Named("logbookProperties")
-    public Properties getLogbookConfig () {
+    public Properties getLogbookConfig (final ConfigProvider configProvider) {
         return configProvider.getConfig("logbook");
     }
 
