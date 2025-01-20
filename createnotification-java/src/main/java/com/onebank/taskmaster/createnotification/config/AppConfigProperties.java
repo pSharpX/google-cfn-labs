@@ -9,6 +9,7 @@ import lombok.Setter;
 public final class AppConfigProperties {
     private Database database = new Database();
     private Notification notification = new Notification();
+    private String profile;
 
     @Getter
     @Setter
