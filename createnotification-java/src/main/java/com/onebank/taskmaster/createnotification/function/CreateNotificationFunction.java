@@ -11,15 +11,14 @@ import com.onebank.taskmaster.createnotification.function.model.GenericMessage;
 import com.onebank.taskmaster.createnotification.function.model.Message;
 import com.onebank.taskmaster.createnotification.function.model.MessageBuilder;
 import com.onebank.taskmaster.createnotification.helper.FunctionUtils;
-import com.onebank.taskmaster.createnotification.model.senders.NotificationMessage;
-import com.onebank.taskmaster.createnotification.service.NotificationMessageConsumer;
+import com.onebank.taskmaster.createnotification.service.NotificationCreator;
 import lombok.RequiredArgsConstructor;
 
 import java.net.HttpURLConnection;
 
 @RequiredArgsConstructor
 public class CreateNotificationFunction implements HttpFunction {
-    private final NotificationMessageConsumer notificationMessageConsumer;
+    private final NotificationCreator notificationCreator;
     private final FunctionExceptionHandler exceptionHandler;
     private final ObjectMapper objectMapper;
 
@@ -37,8 +36,7 @@ public class CreateNotificationFunction implements HttpFunction {
         Message<String> message = new GenericMessage<>();
         response.appendHeader("Content-Type", "application/json");
         try {
-            NotificationMessage notificationMessage = objectMapper.readValue(request.getInputStream(), NotificationMessage.class);
-            notificationMessageConsumer.send(notificationMessage);
+
             message = MessageBuilder
                     .withPayload("")
                     .setHeader(FunctionUtils.HTTP_STATUS_CODE, 202)

@@ -2,12 +2,10 @@ package com.onebank.taskmaster.createnotification.function;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.cloud.functions.CloudEventsFunction;
-import com.google.events.cloud.pubsub.v1.MessagePublishedData;
 import com.onebank.taskmaster.createnotification.exception.BadRequestException;
 import com.onebank.taskmaster.createnotification.exception.ResourceNotFoundException;
 import com.onebank.taskmaster.createnotification.function.exception.CloudEventFunctionExceptionHandler;
-import com.onebank.taskmaster.createnotification.model.senders.NotificationMessage;
-import com.onebank.taskmaster.createnotification.service.NotificationMessageConsumer;
+import com.onebank.taskmaster.createnotification.service.NotificationCreator;
 import io.cloudevents.CloudEvent;
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +14,7 @@ import java.util.Objects;
 
 @RequiredArgsConstructor
 public class CreateNotificationCloudEventFunction implements CloudEventsFunction {
-    private final NotificationMessageConsumer notificationMessageConsumer;
+    private final NotificationCreator notificationCreator;
     private final CloudEventFunctionExceptionHandler exceptionHandler;
     private final ObjectMapper objectMapper;
 
@@ -25,9 +23,6 @@ public class CreateNotificationCloudEventFunction implements CloudEventsFunction
         try {
             String cloudEventData = new String(Objects.requireNonNull(event.getData()).toBytes(), StandardCharsets.UTF_8);
 
-            MessagePublishedData messagePublishedData = objectMapper.readValue(cloudEventData, MessagePublishedData.class);
-            NotificationMessage notificationMessage = objectMapper.readValue(messagePublishedData.getMessage().getData().toByteArray(), NotificationMessage.class);
-            notificationMessageConsumer.send(notificationMessage);
         } catch (IllegalArgumentException ex) {
             exceptionHandler.handleBadRequestException(ex);
         } catch (BadRequestException ex) {
