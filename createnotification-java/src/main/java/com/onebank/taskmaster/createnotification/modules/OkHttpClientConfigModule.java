@@ -3,11 +3,13 @@ package com.onebank.taskmaster.createnotification.modules;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import lombok.RequiredArgsConstructor;
 import okhttp3.OkHttpClient;
 import org.zalando.logbook.Logbook;
 import org.zalando.logbook.okhttp.GzipInterceptor;
 import org.zalando.logbook.okhttp.LogbookInterceptor;
 
+@RequiredArgsConstructor
 public class OkHttpClientConfigModule extends AbstractModule {
 
     @Provides

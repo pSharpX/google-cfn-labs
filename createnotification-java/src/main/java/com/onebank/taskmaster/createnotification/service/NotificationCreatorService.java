@@ -1,5 +1,6 @@
 package com.onebank.taskmaster.createnotification.service;
 
+import com.google.inject.Inject;
 import com.onebank.taskmaster.createnotification.entity.NotificationEntity;
 import com.onebank.taskmaster.createnotification.model.TaskNotificationRequest;
 import com.onebank.taskmaster.createnotification.model.senders.NotificationMessage;
@@ -9,7 +10,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__({@Inject}))
 @Slf4j
 @SuppressWarnings("unchecked")
 public class NotificationCreatorService implements NotificationCreator {

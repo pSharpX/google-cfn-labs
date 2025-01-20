@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @PropertiesPrefix(value = "task-master.datasource.control-plane")
-public class DatabaseConfigProperties {
+public final class DatabaseConfigProperties {
     private String url;
     private String username;
     private String password;

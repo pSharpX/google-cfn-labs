@@ -5,21 +5,21 @@ import com.google.inject.Provides;
 import com.google.inject.Scopes;
 import com.google.inject.Singleton;
 import com.onebank.taskmaster.createnotification.config.ConfigProvider;
-import com.onebank.taskmaster.createnotification.notifier.config.KafkaConfigProperties;
-import com.onebank.taskmaster.createnotification.service.producers.KafkaNotificationMessageProducer;
+import com.onebank.taskmaster.createnotification.notifier.config.RabbitConfigProperties;
 import com.onebank.taskmaster.createnotification.service.producers.NotificationMessageProducer;
+import com.onebank.taskmaster.createnotification.service.producers.RabbitNotificationMessageProducer;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class KafkaConfigModule extends AbstractModule {
+public class RabbitConfigModule extends AbstractModule {
     @Override
     protected void configure() {
-        bind(NotificationMessageProducer.class).to(KafkaNotificationMessageProducer.class).in(Scopes.SINGLETON);
+        bind(NotificationMessageProducer.class).to(RabbitNotificationMessageProducer.class).in(Scopes.SINGLETON);
     }
 
     @Provides
     @Singleton
-    public KafkaConfigProperties kafkaConfigProperties(final ConfigProvider configProvider) {
-        return configProvider.getConfig(KafkaConfigProperties.class);
+    public RabbitConfigProperties rabbitConfigProperties(final ConfigProvider configProvider) {
+        return configProvider.getConfig(RabbitConfigProperties.class);
     }
 }

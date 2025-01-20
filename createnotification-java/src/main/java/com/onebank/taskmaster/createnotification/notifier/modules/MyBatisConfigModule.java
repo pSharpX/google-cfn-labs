@@ -21,7 +21,7 @@ import javax.sql.DataSource;
 public class MyBatisConfigModule extends AbstractModule {
     @Provides
     @Singleton
-    public SqlSessionFactory buildSqlSessionFactory(AppConfigProperties appConfigProperties, DatabaseConfigProperties databaseConfigProperties) {
+    public SqlSessionFactory buildSqlSessionFactory(final AppConfigProperties appConfigProperties, final DatabaseConfigProperties databaseConfigProperties) {
         DataSource dataSource = new PooledDataSource(databaseConfigProperties.getDriverClassName(), databaseConfigProperties.getUrl(),
                 databaseConfigProperties.getUsername(), databaseConfigProperties.getPassword());
 
