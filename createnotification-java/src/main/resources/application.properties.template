@@ -1,6 +1,24 @@
 spring.application.name=createnotification
 control-plane.server.port=8080
 
+task-master.database.enabled=true
+task-master.notification.enabled=true
+task-master.notification.engine=pubsub|kafka
+task-master.notification.provisioned=false
+
+task-master.datasource.control-plane.hikari.connectionTimeout=30000
+task-master.datasource.control-plane.hikari.idleTimeout=600000
+task-master.datasource.control-plane.hikari.maxLifetime=1800000
+task-master.datasource.control-plane.url=jdbc:postgresql://localhost:5432/controlplane_db
+task-master.datasource.control-plane.username=
+task-master.datasource.control-plane.password=
+task-master.datasource.control-plane.driverClassName=org.postgresql.Driver
+
+task-master.notification.pubsub.projectId=
+task-master.notification.pubsub.topic=onebank-notifications-channel
+task-master.notification.pubsub.subscriptionId=
+task-master.notification.pubsub.serviceAccountKeyPath=classpath:your_service_account.json
+
 logbook.filter.enabled=true
 logbook.secure-filter.enabled=true
 logbook.strategy=body-only-if-status-at-least

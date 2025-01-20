@@ -45,6 +45,8 @@ dependencies {
 	runtimeOnly 'ch.qos.logback:logback-classic:1.4.12'
 	implementation 'org.hibernate.validator:hibernate-validator:8.0.0.Final'
 	implementation 'org.glassfish.expressly:expressly:5.0.0'
+	implementation 'org.mybatis:mybatis:3.5.6'
+	implementation 'org.postgresql:postgresql:42.7.3'
 
 	implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.14'
 
