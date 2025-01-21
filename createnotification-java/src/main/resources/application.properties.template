@@ -7,6 +7,7 @@ task-master.notification.enabled=true
 task-master.notification.engine=pubsub|kafka
 task-master.notification.provisioned=false
 
+# Database
 task-master.datasource.control-plane.hikari.connectionTimeout=30000
 task-master.datasource.control-plane.hikari.idleTimeout=600000
 task-master.datasource.control-plane.hikari.maxLifetime=1800000
@@ -15,20 +16,33 @@ task-master.datasource.control-plane.username=
 task-master.datasource.control-plane.password=
 task-master.datasource.control-plane.driverClassName=org.postgresql.Driver
 
+# Broker - Kafka
+task-master.notification.kafka.producer.topic=TASK_MASTER_NOTIFICATIONS
+task-master.notification.kafka.producer.bootstrap.servers=localhost:9092
+task-master.notification.kafka.producer.key.serializer=org.apache.kafka.common.serialization.StringSerializer
+task-master.notification.kafka.producer.value.serializer=org.springframework.kafka.support.serializer.JsonSerializer
+task-master.notification.kafka.producer.compression=none
+task-master.notification.kafka.producer.acks=all
+task-master.notification.kafka.producer.request.timeout.ms=60000
+task-master.notification.kafka.producer.retry.backoff.ms=500
+task-master.notification.kafka.producer.metadata.max.age=180000
+task-master.notification.kafka.producer.connection.max.idle=180000
+
+# Broker - Google PubSub
 task-master.notification.pubsub.projectId=
 task-master.notification.pubsub.topic=onebank-notifications-channel
 task-master.notification.pubsub.subscriptionId=
 task-master.notification.pubsub.serviceAccountKeyPath=classpath:your_service_account.json
 
 
-# task completion reminder
+# Email Notification Templates - task completion reminder
 task-master.channel.email.templates[0].notificationType=TASK_COMPLETION_REMINDER
 task-master.channel.email.templates[0].templateName=DevTaskMaster_TaskCompletionReminder
 task-master.channel.email.templates[0].placeholder.APPLICATION_NAME=application_name
 task-master.channel.email.templates[0].placeholder.CURRENT_YEAR=current_year
 task-master.channel.email.templates[0].placeholder.USERNAME=username
 
-# task created
+# Email Notification Templates - task created
 task-master.channel.email.templates[1].notificationType=TASK_CREATED
 task-master.channel.email.templates[1].templateName=task-created-template
 #DevTaskMaster_TaskCreated
@@ -36,14 +50,14 @@ task-master.channel.email.templates[1].placeholder.APPLICATION_NAME=application_
 task-master.channel.email.templates[1].placeholder.CURRENT_YEAR=current_year
 task-master.channel.email.templates[1].placeholder.USERNAME=username
 
-# task deleted
+# Email Notification Templates - task deleted
 task-master.channel.email.templates[2].notificationType=TASK_DELETED
 task-master.channel.email.templates[2].templateName=DevTaskMaster_TaskDeleted
 task-master.channel.email.templates[2].placeholder.APPLICATION_NAME=application_name
 task-master.channel.email.templates[2].placeholder.CURRENT_YEAR=current_year
 task-master.channel.email.templates[2].placeholder.USERNAME=username
 
-# task completed
+# Email Notification Templates - task completed
 task-master.channel.email.templates[3].notificationType=TASK_COMPLETED
 task-master.channel.email.templates[3].templateName=DevTaskMaster_TaskCompleted
 task-master.channel.email.templates[3].placeholder.APPLICATION_NAME=application_name

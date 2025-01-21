@@ -2,11 +2,15 @@ package com.onebank.taskmaster.createnotification.helper;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 @UtilityClass
 public class FunctionUtils {
@@ -24,7 +28,7 @@ public class FunctionUtils {
         return objectMapper.readValue(inputStream, type);
     }
 
-    public static <T> T convertTo(Class<T> type, Map<String, Object> map) throws IOException {
+    public static <T> T convertTo(Class<T> type, Map<String, Object> map) {
         return objectMapper.convertValue(map, type);
     }
 
@@ -35,4 +39,15 @@ public class FunctionUtils {
     public static String toJson(Object content) throws IOException {
         return objectMapper.writeValueAsString(content);
     }
+
+    public static <T> CompletableFuture<T> supplyAsync(@NonNull Future<T> future) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return future.get();
+            } catch (InterruptedException | ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
 }

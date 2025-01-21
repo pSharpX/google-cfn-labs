@@ -138,7 +138,6 @@ public class PropertiesMapper {
      * @param propertyName the property prefix for the map
      * @param field       the field being mapped
      * @return a Map of objects mapped from the properties
-     * @throws Exception if mapping fails
      */
     private static Map<Object, Object> mapMap(Properties properties, String propertyName, Field field) {
         Map<Object, Object> map = new HashMap<>();
