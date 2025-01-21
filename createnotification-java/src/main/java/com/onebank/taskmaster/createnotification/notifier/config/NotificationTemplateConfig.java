@@ -6,11 +6,12 @@ import com.onebank.taskmaster.createnotification.model.NotificationTemplateDetai
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
 @PropertiesPrefix("task-master.channel.email")
 public class NotificationTemplateConfig {
-	private List<NotificationTemplateDetails> templates;
+	private List<NotificationTemplateDetails> templates = new ArrayList<>();
 }

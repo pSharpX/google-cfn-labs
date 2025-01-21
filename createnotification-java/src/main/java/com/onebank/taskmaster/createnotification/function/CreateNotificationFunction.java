@@ -11,6 +11,7 @@ import com.onebank.taskmaster.createnotification.function.model.GenericMessage;
 import com.onebank.taskmaster.createnotification.function.model.Message;
 import com.onebank.taskmaster.createnotification.function.model.MessageBuilder;
 import com.onebank.taskmaster.createnotification.helper.FunctionUtils;
+import com.onebank.taskmaster.createnotification.model.TaskNotificationRequest;
 import com.onebank.taskmaster.createnotification.service.NotificationCreator;
 import lombok.RequiredArgsConstructor;
 
@@ -36,7 +37,8 @@ public class CreateNotificationFunction implements HttpFunction {
         Message<String> message = new GenericMessage<>();
         response.appendHeader("Content-Type", "application/json");
         try {
-
+            TaskNotificationRequest taskNotificationRequest = objectMapper.readValue(request.getInputStream(), TaskNotificationRequest.class);
+            notificationCreator.create(taskNotificationRequest);
             message = MessageBuilder
                     .withPayload("")
                     .setHeader(FunctionUtils.HTTP_STATUS_CODE, 202)

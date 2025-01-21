@@ -1,5 +1,6 @@
 package com.onebank.taskmaster.createnotification.service.providers;
 
+import com.google.inject.Inject;
 import com.onebank.taskmaster.createnotification.model.NotificationTemplateDetails;
 import com.onebank.taskmaster.createnotification.model.TaskCreatedNotificationRequest;
 import com.onebank.taskmaster.createnotification.model.senders.EmailNotificationMessage;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TaskCreatedContentProvider extends TaskMessageContentProvider<TaskCreatedNotificationRequest> {
 
+    @Inject
     public TaskCreatedContentProvider(NotificationTemplateService templateService) {
         super(templateService);
     }

@@ -1,6 +1,7 @@
 package com.onebank.taskmaster.createnotification.service;
 
 import com.google.inject.Inject;
+import com.onebank.taskmaster.createnotification.converter.TaskNotificationRequestConverter;
 import com.onebank.taskmaster.createnotification.entity.NotificationEntity;
 import com.onebank.taskmaster.createnotification.model.TaskNotificationRequest;
 import com.onebank.taskmaster.createnotification.model.senders.NotificationMessage;
@@ -17,13 +18,12 @@ public class NotificationCreatorService implements NotificationCreator {
     private final NotificationRepository notificationRepository;
     private final BuilderResolver builderResolver;
     private final NotificationMessageProducer notificationMessageProducer;
-    //private final ConvertTo<TaskNotificationRequest, NotificationEntity> converter;
+    private final TaskNotificationRequestConverter converter;
 
     @Override
     public void create(@NonNull TaskNotificationRequest request) {
         log.debug("Creating new notification with title [{}]", request.getTitle());
-        NotificationEntity notificationEntity = new NotificationEntity();
-        // = notificationRepository.save(converter.convert(request));
+        NotificationEntity notificationEntity = notificationRepository.save(converter.convert(request));
         request.setId(notificationEntity.getId());
 
         NotificationMessage notification = builderResolver.resolve(notificationEntity.getNotificationType()).build(request);

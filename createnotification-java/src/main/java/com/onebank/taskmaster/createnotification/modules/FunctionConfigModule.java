@@ -1,9 +1,14 @@
 package com.onebank.taskmaster.createnotification.modules;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
 import com.google.inject.Scopes;
+import com.google.inject.Singleton;
 import com.google.inject.multibindings.MapBinder;
+import com.onebank.taskmaster.createnotification.config.ConfigProvider;
+import com.onebank.taskmaster.createnotification.converter.TaskNotificationRequestConverter;
 import com.onebank.taskmaster.createnotification.model.TaskNotificationType;
+import com.onebank.taskmaster.createnotification.notifier.config.NotificationTemplateConfig;
 import com.onebank.taskmaster.createnotification.service.BuilderResolver;
 import com.onebank.taskmaster.createnotification.service.BuilderResolverService;
 import com.onebank.taskmaster.createnotification.service.ContentProviderResolver;
@@ -42,5 +47,12 @@ public class FunctionConfigModule extends AbstractModule {
         bind(BuilderResolver.class).to(BuilderResolverService.class).in(Scopes.SINGLETON);
         bind(ContentProviderResolver.class).to(ContentProviderResolverService.class).in(Scopes.SINGLETON);
         bind(NotificationCreator.class).to(NotificationCreatorService.class).in(Scopes.SINGLETON);
+        bind(TaskNotificationRequestConverter.class).toInstance(new TaskNotificationRequestConverter());
+    }
+
+    @Provides
+    @Singleton
+    public NotificationTemplateConfig notificationTemplateConfig(final ConfigProvider configProvider) {
+        return configProvider.getConfig(NotificationTemplateConfig.class);
     }
 }

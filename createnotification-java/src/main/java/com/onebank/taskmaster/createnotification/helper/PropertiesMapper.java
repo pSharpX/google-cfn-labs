@@ -8,7 +8,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 @UtilityClass
@@ -61,6 +63,9 @@ public class PropertiesMapper {
                             field.set(pojo, list);
                         }
                     }
+                } else if (Map.class.isAssignableFrom(field.getType())) {
+                    Map<Object, Object> map = mapMap(properties, propertyName, field);
+                    field.set(pojo, map);
                 } else {
                     // Handle nested objects
                     Properties nestedProperties = extractNestedProperties(properties, propertyName);
@@ -124,6 +129,44 @@ public class PropertiesMapper {
             index++;
         }
         return list;
+    }
+
+    /**
+     * Maps map-type fields from properties.
+     *
+     * @param properties  the source properties
+     * @param propertyName the property prefix for the map
+     * @param field       the field being mapped
+     * @return a Map of objects mapped from the properties
+     * @throws Exception if mapping fails
+     */
+    private static Map<Object, Object> mapMap(Properties properties, String propertyName, Field field) {
+        Map<Object, Object> map = new HashMap<>();
+
+        ParameterizedType type = (ParameterizedType) field.getGenericType();
+        Class<?> keyType = (Class<?>) type.getActualTypeArguments()[0];
+        Class<?> valueType = (Class<?>) type.getActualTypeArguments()[1];
+
+        String prefixWithDot = propertyName + ".";
+        for (String key : properties.stringPropertyNames()) {
+            if (key.startsWith(prefixWithDot)) {
+                String mapKey = key.substring(prefixWithDot.length()).split("\\.")[0];
+                String mapValueProperty = propertyName + "." + mapKey;
+
+                Object mapKeyObject = convertValue(mapKey, keyType);
+                Object mapValueObject;
+
+                if (isPrimitiveOrWrapper(valueType) || valueType == String.class) {
+                    mapValueObject = convertValue(properties.getProperty(mapValueProperty), valueType);
+                } else {
+                    Properties nestedProperties = extractNestedProperties(properties, mapValueProperty);
+                    mapValueObject = mapPropertiesToPojo(nestedProperties, valueType);
+                }
+
+                map.put(mapKeyObject, mapValueObject);
+            }
+        }
+        return map;
     }
 
     /**

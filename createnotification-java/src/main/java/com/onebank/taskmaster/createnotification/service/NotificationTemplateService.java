@@ -1,11 +1,12 @@
 package com.onebank.taskmaster.createnotification.service;
 
+import com.google.inject.Inject;
 import com.onebank.taskmaster.createnotification.model.NotificationTemplateDetails;
 import com.onebank.taskmaster.createnotification.model.TaskNotificationType;
 import com.onebank.taskmaster.createnotification.notifier.config.NotificationTemplateConfig;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__({@Inject}))
 public class NotificationTemplateService {
     private final NotificationTemplateConfig templateConfig;
 

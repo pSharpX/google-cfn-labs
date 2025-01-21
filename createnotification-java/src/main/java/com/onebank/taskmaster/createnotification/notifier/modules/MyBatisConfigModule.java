@@ -2,9 +2,12 @@ package com.onebank.taskmaster.createnotification.notifier.modules;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.Scopes;
 import com.google.inject.Singleton;
 import com.onebank.taskmaster.createnotification.config.AppConfigProperties;
 import com.onebank.taskmaster.createnotification.notifier.config.DatabaseConfigProperties;
+import com.onebank.taskmaster.createnotification.repository.MyBatisNotificationPreferenceRepository;
+import com.onebank.taskmaster.createnotification.repository.MyBatisNotificationRepository;
 import com.onebank.taskmaster.createnotification.repository.NotificationPreferenceRepository;
 import com.onebank.taskmaster.createnotification.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,12 @@ import javax.sql.DataSource;
 
 @RequiredArgsConstructor
 public class MyBatisConfigModule extends AbstractModule {
+    @Override
+    protected void configure() {
+        bind(NotificationRepository.class).to(MyBatisNotificationRepository.class).in(Scopes.SINGLETON);
+        bind(NotificationPreferenceRepository.class).to(MyBatisNotificationPreferenceRepository.class).in(Scopes.SINGLETON);
+    }
+
     @Provides
     @Singleton
     public SqlSessionFactory buildSqlSessionFactory(final AppConfigProperties appConfigProperties, final DatabaseConfigProperties databaseConfigProperties) {
