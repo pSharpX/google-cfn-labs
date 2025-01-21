@@ -6,6 +6,6 @@ import org.apache.ibatis.session.SqlSessionFactory;
 
 @Slf4j
 @RequiredArgsConstructor
-public class MyBatisNotificationPreferenceRepository implements NotificationPreferenceRepository {
+public class MyBatisNotificationPreferenceRepository implements NotificationPreferenceMapper {
     private final SqlSessionFactory sqlSessionFactory;
 }

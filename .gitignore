@@ -159,3 +159,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Sensitive files ###
+*-sa.json

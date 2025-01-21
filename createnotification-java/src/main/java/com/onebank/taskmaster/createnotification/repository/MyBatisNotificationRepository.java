@@ -13,20 +13,20 @@ import static com.onebank.taskmaster.createnotification.exception.utils.Exceptio
 
 @Slf4j
 @RequiredArgsConstructor
-public class MyBatisNotificationRepository implements NotificationRepository {
+public class MyBatisNotificationRepository implements NotificationMapper, NotificationRepository {
     private final SqlSessionFactory sqlSessionFactory;
 
     @Override
     public Optional<NotificationEntity> findById(Long id) {
         try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-            return sqlSession.getMapper(NotificationRepository.class).findById(id);
+            return sqlSession.getMapper(NotificationMapper.class).findById(id);
         }
     }
 
     @Override
     public NotificationEntity save(NotificationEntity entity) {
         try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-            NotificationRepository repository = sqlSession.getMapper(NotificationRepository.class);
+            NotificationMapper repository = sqlSession.getMapper(NotificationMapper.class);
             Long id = repository.create(entity);
             return  repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND, "notification record not found"));
         }
@@ -35,7 +35,7 @@ public class MyBatisNotificationRepository implements NotificationRepository {
     @Override
     public Long create(NotificationEntity entity) {
         try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-            return sqlSession.getMapper(NotificationRepository.class).create(entity);
+            return sqlSession.getMapper(NotificationMapper.class).create(entity);
         }
     }
 }
