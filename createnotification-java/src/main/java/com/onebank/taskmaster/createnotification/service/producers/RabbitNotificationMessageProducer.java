@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 public class RabbitNotificationMessageProducer implements NotificationMessageProducer {
     @Override
     public void sendMessage(@NonNull NotificationMessage notification) {
+        log.debug("Sending [channel={}, type={}] message through Rabbit Provider", notification.getChannel(), notification.getType());
         throw new UnsupportedOperationException();
     }
 }

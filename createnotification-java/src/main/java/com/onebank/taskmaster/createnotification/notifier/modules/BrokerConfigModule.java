@@ -12,9 +12,9 @@ public class BrokerConfigModule extends AbstractModule {
         if (appConfigProperties.getNotification().isEnabled()) {
             String brokerProvider = appConfigProperties.getNotification().getEngine();
             switch (brokerProvider) {
-                case "pubsub": install(new PubSubConfigModule());
-                case "rabbit": install(new RabbitConfigModule());
-                default: install(new KafkaConfigModule());
+                case "pubsub": install(new PubSubConfigModule());break;
+                case "rabbit": install(new RabbitConfigModule());break;
+                default: install(new KafkaConfigModule());break;
             }
         }
     }

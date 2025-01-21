@@ -1,5 +1,6 @@
 package com.onebank.taskmaster.createnotification.helper;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
@@ -40,6 +41,14 @@ public class FunctionUtils {
         return objectMapper.writeValueAsString(content);
     }
 
+    public static String toJson(ObjectMapper objectMapper,Object content) {
+        try {
+            return objectMapper.writeValueAsString(content);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static <T> CompletableFuture<T> supplyAsync(@NonNull Future<T> future) {
         return CompletableFuture.supplyAsync(() -> {
             try {
@@ -49,5 +58,4 @@ public class FunctionUtils {
             }
         });
     }
-
 }
