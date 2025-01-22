@@ -8,10 +8,12 @@ import com.google.inject.name.Named;
 import com.onebank.taskmaster.createnotification.config.ConfigProvider;
 import com.onebank.taskmaster.createnotification.model.AbstractMessage;
 import com.onebank.taskmaster.createnotification.notifier.config.KafkaConfigProperties;
+import com.onebank.taskmaster.createnotification.notifier.serializer.JsonSerializer;
 import com.onebank.taskmaster.createnotification.service.producers.KafkaNotificationMessageProducer;
 import com.onebank.taskmaster.createnotification.service.producers.NotificationMessageProducer;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.common.serialization.Serializer;
 
 import java.util.Properties;
 
@@ -20,6 +22,7 @@ public class KafkaConfigModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(NotificationMessageProducer.class).to(KafkaNotificationMessageProducer.class).in(Scopes.SINGLETON);
+        bind(Serializer.class).to(JsonSerializer.class).in(Scopes.SINGLETON);
     }
 
     @Provides
@@ -38,6 +41,7 @@ public class KafkaConfigModule extends AbstractModule {
     @Provides
     @Singleton
     public KafkaProducer<String, AbstractMessage> kafkaProducer(final @Named("kafkaProducerProperties") Properties kafkaProperties) {
-        return new KafkaProducer<String, AbstractMessage>(kafkaProperties);
+        Thread.currentThread().setContextClassLoader(null);
+        return new KafkaProducer<>(kafkaProperties);
     }
 }

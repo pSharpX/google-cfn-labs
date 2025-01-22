@@ -8,8 +8,9 @@ import com.onebank.taskmaster.createnotification.config.AppConfigProperties;
 import com.onebank.taskmaster.createnotification.notifier.config.DatabaseConfigProperties;
 import com.onebank.taskmaster.createnotification.repository.MyBatisNotificationPreferenceRepository;
 import com.onebank.taskmaster.createnotification.repository.MyBatisNotificationRepository;
-import com.onebank.taskmaster.createnotification.repository.NotificationPreferenceMapper;
+import com.onebank.taskmaster.createnotification.repository.NotificationPreferenceRepository;
 import com.onebank.taskmaster.createnotification.repository.NotificationMapper;
+import com.onebank.taskmaster.createnotification.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.datasource.pooled.PooledDataSource;
 import org.apache.ibatis.mapping.Environment;
@@ -24,8 +25,8 @@ import javax.sql.DataSource;
 public class MyBatisConfigModule extends AbstractModule {
     @Override
     protected void configure() {
-        bind(NotificationMapper.class).to(MyBatisNotificationRepository.class).in(Scopes.SINGLETON);
-        bind(NotificationPreferenceMapper.class).to(MyBatisNotificationPreferenceRepository.class).in(Scopes.SINGLETON);
+        bind(NotificationRepository.class).to(MyBatisNotificationRepository.class).in(Scopes.SINGLETON);
+        bind(NotificationPreferenceRepository.class).to(MyBatisNotificationPreferenceRepository.class).in(Scopes.SINGLETON);
     }
 
     @Provides
@@ -37,7 +38,7 @@ public class MyBatisConfigModule extends AbstractModule {
         Environment environment = new Environment(appConfigProperties.getProfile(), new JdbcTransactionFactory(), dataSource);
         Configuration configuration = new Configuration(environment);
         configuration.addMapper(NotificationMapper.class);
-        configuration.addMapper(NotificationPreferenceMapper.class);
+        configuration.addMapper(NotificationPreferenceRepository.class);
 
         SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
         return builder.build(configuration);

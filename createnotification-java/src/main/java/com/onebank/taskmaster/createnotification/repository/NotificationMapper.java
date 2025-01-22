@@ -17,7 +17,7 @@ public interface NotificationMapper {
             @Result(property = "name", column = "name")})
     Optional<NotificationEntity> findById(Long id);
 
-    @Insert("INSERT INTO notifications (userIdentifier, title, message, notificationType, channel, status, enabled) VALUES (#{userIdentifier}, #{title}, #{message}, #{notificationType}, #{channel}, #{status}, #{enabled})")
+    @Insert("INSERT INTO notifications (\"userIdentifier\", title, message, \"notificationType\", channel, status, enabled) VALUES (#{userIdentifier}, #{title}, #{message}, #{notificationType}, #{channel}, #{status}, #{enabled})")
     @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
     Long create(NotificationEntity entity);
 }

@@ -1,7 +1,7 @@
 package com.onebank.taskmaster.createnotification.repository;
 
+import com.google.inject.Inject;
 import com.onebank.taskmaster.createnotification.entity.NotificationEntity;
-import com.onebank.taskmaster.createnotification.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
@@ -9,10 +9,8 @@ import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.util.Optional;
 
-import static com.onebank.taskmaster.createnotification.exception.utils.ExceptionConstantsUtils.NOT_FOUND;
-
 @Slf4j
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__({@Inject}))
 public class MyBatisNotificationRepository implements NotificationMapper, NotificationRepository {
     private final SqlSessionFactory sqlSessionFactory;
 
@@ -27,8 +25,9 @@ public class MyBatisNotificationRepository implements NotificationMapper, Notifi
     public NotificationEntity save(NotificationEntity entity) {
         try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
             NotificationMapper repository = sqlSession.getMapper(NotificationMapper.class);
-            Long id = repository.create(entity);
-            return  repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND, "notification record not found"));
+            repository.create(entity);
+            sqlSession.commit();
+            return  entity;
         }
     }
 

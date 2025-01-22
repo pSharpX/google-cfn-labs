@@ -58,4 +58,12 @@ public class FunctionUtils {
             }
         });
     }
+
+    public static <T> byte[] writeValueAsBytes(T data) {
+        try {
+            return objectMapper.writeValueAsBytes(data);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
