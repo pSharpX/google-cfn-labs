@@ -4,17 +4,147 @@
 The createnotification function is responsible for publishing notifications (email, push, sms) for the tasks management ecosystem.
 
 ## Getting Started
+## 1. Configure Database
+Install docker and from docker hub pull one of the following supported databases:
 
-## 2. Run function locally
+### 1.1 mssql-server
+Pull mssql-server image (server:2019-latest), start mssql-server container and test the connection with any sql client
+
+Pull mssql-server image from Docker Hub
+```
+docker pull mcr.microsoft.com/mssql/server:2019-latest
+```
+Run a container
+```
+docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=yourStrong(!)Password" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2019-latest
+``` 
+Connect to the MSSQL-Server instance and check connectivity
+```
+docker exec -it <container_id|container_name> /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P <your_password>
+```  
+Download the project from the GitHub repo, get a copy from the src/main/resources/application.properties.template for local use and put in /src/main/resources.
+
+In the application.properties modify these properties as needed to match your sqlserver configuration:
+``` 
+task-master.datasource.control-plane.url=jdbc:sqlserver://localhost:1433;database=<your_database_name>;
+task-master.datasource.control-plane.username=
+task-master.datasource.control-plane.password=
+task-master.datasource.control-plane.driverClassName=com.microsoft.sqlserver.jdbc.SQLServerDriver
+task-master.datasource.control-plane.jpa.properties.hibernate.dialect=org.hibernate.dialect.SQLServer2012Dialect
+```
+
+### 1.2 postgres
+Pull postgres image (postgres:latest), start postgres container and test the connection with any pgsql client
+
+Pull postgres image from Docker Hub
+```
+docker pull postgres:latest
+podman pull postgres:latest
+```
+Run a container
+```
+docker run --name some-postgres -p 5432:5432 -e POSTGRES_DB=controlplane_db -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+podman run --name some-postgres -p 5432:5432 -e POSTGRES_DB=controlplane_db -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+``` 
+Connect to the postgres instance and check connectivity
+```
+docker run -it --rm postgres:latest psql -h <host> -U <username> -d <database_name>
+docker run -it --rm postgres:latest psql -h localhost -U admin -d controlplane_db
+podman run -it --rm postgres:latest psql -h localhost -U admin -d controlplane_db
+```  
+Download the project from the GitHub repo, get a copy from the src/main/resources/application.properties.template for local use and put in /src/main/resources.
+
+In the application.properties modify these properties as needed to match your sqlserver configuration:
+``` 
+task-master.datasource.control-plane.url=jdbc:postgresql://localhost:5432/controlplane_db
+task-master.datasource.control-plane.username=
+task-master.datasource.control-plane.password=
+task-master.datasource.control-plane.driverClassName=org.postgresql.Driver
+```
+Do not upload the local version of the application.properties to the repository. Add to .gitignore file.
+
+## 2. Configure Broker
+Install docker and from docker hub pull one of the following supported brokers:
+
+### 2.1 kafka
+Pull apache/kafka image (apache/kafka:latest), start kafka container and test the connection
+https://hub.docker.com/r/apache/kafka
+
+Pull apache/kafka:latest image from Docker Hub
+```
+docker pull apache/kafka:latest
+```
+Run a container
+```
+docker run -d -p 9092:9092 --name broker apache/kafka:latest
+podman run -d -p 9092:9092 --name broker apache/kafka:latest
+``` 
+Open a shell in the broker container:
+```
+docker exec --workdir /opt/kafka/bin/ -it broker sh
+podman exec --workdir /opt/kafka/bin/ -it broker sh
+```
+A topic is a logical grouping of events in Kafka. From inside the container, create a topic called test-topic:
+```
+./kafka-topics.sh --bootstrap-server localhost:9092 --create --topic test-topic
+./kafka-topics.sh --bootstrap-server localhost:9092 --create --topic TASK_MASTER_NOTIFICATIONS
+```
+To list topics in a kafka cluster run the following command in the container:
+```
+./kafka-topics.sh --bootstrap-server localhost:9092 --list
+```
+Write two string events into the test-topic topic using the console producer that ships with Kafka:
+```
+./kafka-console-producer.sh --bootstrap-server localhost:9092 --topic test-topic
+```
+This command will wait for input at a > prompt. Enter hello, press Enter, then world, and press Enter again. Enter Ctrl+C to exit the console producer.
+
+Now read the events in the test-topic topic from the beginning of the log:
+```
+./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test-topic --from-beginning
+./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic TASK_MASTER_NOTIFICATIONS --from-beginning
+```
+
+Download the project from the GitHub repo, get a copy from the src/main/resources/application.properties.template for local use and put in /src/main/resources.
+
+In the application.properties modify these properties as needed to match your kafka configuration:
+``` 
+task-master.notification.kafka.bootstrap.servers=localhost:9092
+```
+
+### 2.2 GCP PubSub
+[Spring Cloud GCP PubSub Documentation](https://googlecloudplatform.github.io/spring-cloud-gcp/3.1.0/reference/html/index.html#cloud-pubsub)
+
+#### 2.2.1 Running PubSub in Local Environment using emulator
+[PubSub Local Emulator](https://medium.com/google-cloud/use-pub-sub-emulator-in-minikube-67cd1f289daf)
+TBD
+
+#### 2.2.2 Provision Cloud PubSub in GCP
+
+Create a topic in GCP PubSub and include a subscription.
+
+Download the project from the GitHub repo, get a copy from the src/main/resources/application.properties.template for local use and put in /src/main/resources.
+
+In the application.properties modify these properties as needed to match your configuration:
+``` 
+task-master.notification.pubsub.projectId=
+task-master.notification.pubsub.topic=
+task-master.notification.pubsub.subscriptionId=
+task-master.notification.pubsub.serviceAccountKeyPath=classpath:<*-sa.json>
+```
+
+Do not upload the local version of the application.properties to the repository. Add to .gitignore file.
+
+## 3. Run function locally
 Install docker/podman and buildpacks tools:
 
-### 2.1 Buildpacks
+### 3.1 Buildpacks
 Install buildpacks (depends on docker/podman) and build function image:
 
-#### 2.1.1 Installing buildpacks
+#### 3.1.1 Installing buildpacks
 - [Installing buidpacks](https://buildpacks.io/docs/for-platform-operators/how-to/integrate-ci/pack/)
 
-#### 2.1.2 Build local image
+#### 3.1.2 Build local image
 - [Build a function with buildpacks](https://cloud.google.com/docs/buildpacks/build-function#java)
 - [Configure Cloud Run and Cloud Run functions services](https://cloud.google.com/docs/buildpacks/service-specific-configs)
   Configure project.toml file with the following configuration:
@@ -44,91 +174,6 @@ podman run -it -p8080:8080 createnotification
 ```
 Visit the running function by browsing to localhost:8080 (only when function is trigger by http events)
 
-## 3. Run PuSub emulator for local testing (ONLY for CloudEventFunction)
-You can trigger a function locally using a push message from the Pub/Sub emulator.
-- [Test locally with the Pub/Sub emulator](https://cloud.google.com/functions/docs/local-development)
-
-Make sure you have the pack tool and Docker installed.
-
-### 3.1 Buildpacks
-Install buildpacks (depends on docker/podman) and build function image:
-
-#### 3.1.1 Installing buildpacks
-- [Installing buidpacks](https://buildpacks.io/docs/for-platform-operators/how-to/integrate-ci/pack/)
-
-### 3.2 Start PubSub emulator (using GCLOUD CLI)
-
-Issue with emulator and function-framework: https://github.com/GoogleCloudPlatform/functions-framework-dotnet/issues/234
-[Fix local development with Pub/Sub emulator](https://github.com/GoogleCloudPlatform/functions-framework-nodejs/pull/272)
-
-In the first terminal, start the Pub/Sub emulator on port 8043 in a local project:
-```
-gcloud beta emulators pubsub start --project=abc --host-port='localhost:8043'
-```
-
-In the second terminal, create a Pub/Sub topic and subscription:
-```
-curl -s -X PUT 'http://localhost:8043/v1/projects/abc/topics/mytopic'
-```
-Use http://localhost:8080 as the push subscription's endpoint.
-```
-curl -s -X PUT 'http://localhost:8043/v1/projects/abc/subscriptions/mysub' -H 'Content-Type: application/json' --data '{"topic":"projects/abc/topics/mytopic","pushConfig":{"pushEndpoint":"http://localhost:8080/projects/abc/topics/mytopic"}}'
-```
-Make sure the function is running on port 8080. This is where the emulator will send push messages:
-```
-docker run --rm -p 8080:8080 createnotification
-podman run -it -p8080:8080 createnotification
-```
-In the second terminal, invoke the function by publishing a message. The message data needs to be encoded in base64. 
-This example uses the base64 encoded json data:
-```
-<your_payload>
-{
-    "id": 1,
-    "channel": "EMAIL",
-    "type": "TASK_CREATED",
-    "user": "your_email",
-    "title": "Learn Terraform",
-    "message": "Learn Terraform from scratch",
-    "recipientName": "your_name",
-    "recipientEmail": "your_email",
-    "templateName": "task-created-template",
-    "vars": {
-        "application_name": "Task Master",
-        "username": "your_name",
-        "current_year": "2025",
-        "task_title": "Learn Terraform",
-        "task_description": "Learn Terraform",
-        "task_due_date": "Learn Terraform",
-        "task_priority": "Learn Terraform"
-    }
-}
-<your_request_payload>
-{
-    "data": {
-        "data": "<your_payload>",
-        "attributes": {
-            "Content-Type": "application/json"
-        }
-    },
-    "context": {
-        "eventId": "1",
-        "eventType": "google.pubsub.topic.publish",
-        "resource": {
-            "name": "topic",
-            "service": "pubsub.googleapis.com",
-            "type": "type.googleapis.com/google.pubsub.v1.PubsubMessage"
-        },
-        "timestamp": "2024-12-30T16:22:43.946Z"
-    }
-}
-```
-Now invoke the function by publishing a message:
-```
-curl -s -X POST 'http://localhost:8043/v1/projects/abc/topics/mytopic:publish' -H 'Content-Type: application/json' --data '<your_request_payload>'
-```
-
-### 3.2 Start PubSub emulator (using docker/podman)
 
 ### Build and Test
 For building and running test:
