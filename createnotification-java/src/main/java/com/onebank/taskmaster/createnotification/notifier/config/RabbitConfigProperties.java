@@ -8,4 +8,10 @@ import lombok.Setter;
 @Setter
 @PropertiesPrefix(value = "task-master.notification.rabbit")
 public class RabbitConfigProperties {
+    private String topic;
+    private String hostname;
+    private int port;
+    private String username;
+    private String password;
+    private String virtualhost;
 }

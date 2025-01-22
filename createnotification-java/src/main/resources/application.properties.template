@@ -28,6 +28,14 @@ task-master.notification.kafka.producer.retry.backoff.ms=500
 task-master.notification.kafka.producer.metadata.max.age=180000
 task-master.notification.kafka.producer.connection.max.idle=180000
 
+# Broker - RabbitMQ
+task-master.notification.rabbit.topic=TASK_MASTER_NOTIFICATIONS
+task-master.notification.rabbit.hostname=localhost
+task-master.notification.rabbit.port=5672
+task-master.notification.rabbit.username=guest
+task-master.notification.rabbit.password=guest
+task-master.notification.rabbit.virtualhost=/
+
 # Broker - Google PubSub
 task-master.notification.pubsub.projectId=
 task-master.notification.pubsub.topic=onebank-notifications-channel
