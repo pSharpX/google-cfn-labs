@@ -3,6 +3,7 @@ plugins {
 	id 'application'
 	id 'io.spring.dependency-management' version '1.1.5'
 	id 'com.gradleup.shadow' version '8.3.5'
+	id 'org.liquibase.gradle' version '2.2.0'
 }
 
 group = 'com.onebank.taskmaster.controlplane'
@@ -33,6 +34,12 @@ ext {
 }
 
 dependencies {
+	liquibaseRuntime 'org.liquibase:liquibase-core:4.8.0'
+	liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:3.0.2'
+	liquibaseRuntime 'info.picocli:picocli:4.7.4'
+	liquibaseRuntime 'org.yaml:snakeyaml:1.19'
+	liquibaseRuntime 'org.postgresql:postgresql:42.7.3'
+
 	implementation ('com.google.inject:guice:7.0.0') {
 		exclude group: 'com.google.guava', module: 'guava'
 	}
@@ -102,5 +109,18 @@ tasks.register("runFunction", JavaExec) {
 	)
 	doFirst {
 		args('--classpath', files(configurations.runtimeClasspath, sourceSets.main.output).asPath)
+	}
+}
+
+liquibase {
+	activities {
+		main {
+			changelogFile 'src/main/resources/db/changelog/db.changelog-1.0.yaml'
+			url project.findProperty('liquibase.url')
+			username project.findProperty('liquibase.username')
+			password project.findProperty('liquibase.password')
+			logLevel "info"
+		}
+		runList = 'main'
 	}
 }

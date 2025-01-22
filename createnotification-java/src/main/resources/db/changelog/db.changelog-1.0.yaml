@@ -1,0 +1,69 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-notification-table
+      author: christian.rivera
+      comment: add notification table definition
+      changes:
+        - createTable:
+            tableName: notifications
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: userIdentifier
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: message
+                  type: varchar(1000)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: notificationType
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: channel
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: enabled
+                  type: boolean
+              - column:
+                  name: createdBy
+                  type: varchar(50)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: createdDate
+                  type: date
+                  constraints:
+                    nullable: true
+              - column:
+                  name: updatedBy
+                  type: varchar(30)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: updateDatetime
+                  type: date
+                  constraints:
+                    nullable: true
