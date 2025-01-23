@@ -35,6 +35,7 @@ task-master.notification.rabbit.port=5672
 task-master.notification.rabbit.username=guest
 task-master.notification.rabbit.password=guest
 task-master.notification.rabbit.virtualhost=/
+task-master.notification.rabbit.routingKey=notification.sent
 
 # Broker - Google PubSub
 task-master.notification.pubsub.projectId=

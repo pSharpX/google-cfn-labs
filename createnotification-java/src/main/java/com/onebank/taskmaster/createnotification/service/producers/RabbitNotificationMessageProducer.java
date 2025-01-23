@@ -21,7 +21,7 @@ public class RabbitNotificationMessageProducer implements NotificationMessagePro
     public void sendMessage(@NonNull NotificationMessage notification) {
         log.debug("Sending [channel={}, type={}] message through Rabbit Provider", notification.getChannel(), notification.getType());
         try {
-            channel.basicPublish(configProperties.getTopic(), "notifications.channel", null, FunctionUtils.writeValueAsBytes(notification));
+            channel.basicPublish(configProperties.getTopic(), configProperties.getRoutingKey(), null, FunctionUtils.writeValueAsBytes(notification));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

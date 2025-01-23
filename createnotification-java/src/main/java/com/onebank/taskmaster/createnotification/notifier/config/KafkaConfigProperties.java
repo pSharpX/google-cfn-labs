@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @PropertiesPrefix(value = "task-master.notification.kafka.producer")
-public class KafkaConfigProperties {
+public final class KafkaConfigProperties {
     private String topic;
 }

@@ -12,6 +12,6 @@ import java.util.List;
 @Getter
 @Setter
 @PropertiesPrefix("task-master.channel.email")
-public class NotificationTemplateConfig {
+public final class NotificationTemplateConfig {
 	private List<NotificationTemplateDetails> templates = new ArrayList<>();
 }

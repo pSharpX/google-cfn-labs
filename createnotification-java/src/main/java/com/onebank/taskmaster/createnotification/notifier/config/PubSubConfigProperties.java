@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @PropertiesPrefix(value = "task-master.notification.pubsub")
-public class PubSubConfigProperties {
+public final class PubSubConfigProperties {
     private String projectId;
     private String locationId;
     private String topic;
