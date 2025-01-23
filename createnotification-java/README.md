@@ -109,18 +109,90 @@ Download the project from the GitHub repo, get a copy from the src/main/resource
 
 In the application.properties modify these properties as needed to match your kafka configuration:
 ``` 
-task-master.notification.kafka.bootstrap.servers=localhost:9092
+task-master.notification.kafka.producer.topic=TASK_MASTER_NOTIFICATIONS
+task-master.notification.kafka.producer.bootstrap.servers=localhost:9092
 ```
 
-### 2.2 GCP PubSub
+### 2.2 RabbitMQ
+Pull apache/kafka image (apache/kafka:latest), start kafka container and test the connection
+https://hub.docker.com/_/rabbitmq/
+
+Pull rabbitmq:latest image from Docker Hub
+```
+docker pull rabbitmq:latest
+podman pull rabbitmq:latest
+```
+Run a container
+```
+docker run -d -p 5672:5672 --hostname my-rabbit --name some-rabbit rabbitmq:3
+podman run -d -p 5672:5672 --hostname my-rabbit --name some-rabbit rabbitmq:3
+
+docker run -d -p 5672:5672 -p 15672:15672 --hostname my-rabbit --name some-rabbit -e RABBITMQ_DEFAULT_USER=user -e RABBITMQ_DEFAULT_PASS=password rabbitmq:3-management
+podman run -d -p 5672:5672 -p 15672:15672 --hostname my-rabbit --name some-rabbit -e RABBITMQ_DEFAULT_USER=user -e RABBITMQ_DEFAULT_PASS=password rabbitmq:3-management
+``` 
+Open a shell in the broker container:
+```
+docker exec -it some-rabbit sh
+podman exec -it some-rabbit sh
+```
+To list queues/topics/channels in a rabbit run the following command in the container:
+```
+rabbitmqctl list_queues
+rabbitmqctl list_channels
+rabbitmqctl list_users
+rabbitmqctl list_exchanges
+rabbitmqctl list_consumers
+```
+
+The management plugin ships with a command line tool rabbitmqadmin which can perform some of the same actions as the Web-based UI, and which may be more convenient for automation tasks.
+```
+rabbitmqadmin -u user -p password list queues messages
+```
+a) Declare an exchange
+```
+rabbitmqadmin -u user -p password declare exchange name=my.queue type=topic
+rabbitmqadmin -u user -p password declare exchange name=TASK_MASTER_NOTIFICATIONS type=topic
+```
+b) Declare a queue, with optional parameters
+```
+rabbitmqadmin -u user -p password declare queue name=my.queue durable=false
+rabbitmqadmin -u user -p password declare queue name=TASK_MASTER_NOTIFICATIONS durable=false
+```
+c) To route messages from an exchange to a queue, you need to create a binding between them
+```
+rabbitmqadmin -u user -p password declare binding source=my.topic destination_type=queue destination=my.queue routing_key=user.*
+rabbitmqadmin -u user -p password declare binding source=TASK_MASTER_NOTIFICATIONS destination_type=queue destination=TASK_MASTER_NOTIFICATIONS routing_key=notification.sent
+```
+d) Publish a message
+```
+rabbitmqadmin -u user -p password publish exchange=my.topic routing_key=user.* payload="hello, world"
+rabbitmqadmin -u user -p password publish exchange=TASK_MASTER_NOTIFICATIONS routing_key=notification.sent payload="hello, world"
+```
+Get message from exchange/queue
+```
+rabbitmqadmin -u user -p password get queue=TASK_MASTER_NOTIFICATIONS ackmode=ack_requeue_false
+```
+
+Download the project from the GitHub repo, get a copy from the src/main/resources/application.properties.template for local use and put in /src/main/resources.
+
+In the application.properties modify these properties as needed to match your kafka configuration:
+``` 
+task-master.notification.rabbit.topic=TASK_MASTER_NOTIFICATIONS
+task-master.notification.rabbit.hostname=localhost
+task-master.notification.rabbit.port=5672
+task-master.notification.rabbit.username=guest
+task-master.notification.rabbit.password=guest
+task-master.notification.rabbit.virtualhost=/
+```
+
+### 2.3 GCP PubSub
 [Spring Cloud GCP PubSub Documentation](https://googlecloudplatform.github.io/spring-cloud-gcp/3.1.0/reference/html/index.html#cloud-pubsub)
 
-#### 2.2.1 Running PubSub in Local Environment using emulator
+#### 2.3.1 Running PubSub in Local Environment using emulator
 [PubSub Local Emulator](https://medium.com/google-cloud/use-pub-sub-emulator-in-minikube-67cd1f289daf)
 TBD
 
-#### 2.2.2 Provision Cloud PubSub in GCP
-
+#### 2.3.2 Provision Cloud PubSub in GCP
 Create a topic in GCP PubSub and include a subscription.
 
 Download the project from the GitHub repo, get a copy from the src/main/resources/application.properties.template for local use and put in /src/main/resources.
