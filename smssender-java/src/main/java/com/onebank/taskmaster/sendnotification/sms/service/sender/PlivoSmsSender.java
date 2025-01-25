@@ -14,6 +14,6 @@ public class PlivoSmsSender implements SmsSender {
 
     @Override
     public void send(@NonNull SmsNotificationMessage notificationMessage) {
-        log.debug("Sending [{}] notification with SendGrid Provider", notificationMessage.getChannel().getName());
+        log.debug("Sending [{}] notification with Plivo Provider", notificationMessage.getChannel().getName());
     }
 }

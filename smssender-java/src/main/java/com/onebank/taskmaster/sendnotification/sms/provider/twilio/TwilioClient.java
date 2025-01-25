@@ -12,6 +12,6 @@ import feign.RequestLine;
 })
 public interface TwilioClient {
 
-	@RequestLine("POST /Accounts/{accountSid}}/Messages.json")
+	@RequestLine("POST /Accounts/{accountSid}/Messages.json")
 	SendMessageResponse sendMessage(@Param("accountSid") String accountSid, SendMessageParam param);
 }

@@ -5,45 +5,34 @@ The smssender function is responsible for sending sms/whatsapp notifications in 
 
 ## Getting Started
 
-## 1. Configure Email Provider
-For sending emails notifications the following integrations are supported:
+## 1. Configure SMS Provider
+For sending SMS notifications the following integrations are supported:
 
-### 1.1 MailChimp
-For MailChimp Transactional API integration review the following documentation:
-[MailChimp Transactional API](https://mailchimp.com/developer/transactional/guides/quick-start/)
+### 1.1 Twilio
+For Twilio Transactional API integration review the following documentation:
+[Message Resource API](https://www.twilio.com/docs/messaging/api/message-resource)
 
 These are the requirements:
-- Mailchimp Account
+- Twilio Account
 - API Key
 
 Once account is setup properly configure the following properties:
 ``` 
-task-master.channel.email.mailchimp.url=https://mandrillapp.com
-task-master.channel.email.mailchimp.apiVersion=/api/1.0
-task-master.channel.email.mailchimp.basePath=${task-master.channel.email.mailchimp.url}${task-master.channel.email.mailchimp.apiVersion}
-task-master.channel.email.mailchimp.apikey=
-task-master.channel.email.mailchimp.config.mergeLanguage=handlebars
-task-master.channel.email.mailchimp.from.email=
-task-master.channel.email.mailchimp.from.name=
+task-master.channel.sms.twilio.url=https://api.twilio.com
+task-master.channel.sms.twilio.apiVersion=/2010-04-01
+task-master.channel.sms.twilio.basePath=https://api.twilio.com/2010-04-01
+task-master.channel.sms.twilio.accountSid=your_accountSid
+task-master.channel.sms.twilio.credentials.sid=your_apikey_sid
+task-master.channel.sms.twilio.credentials.secret=your_apikey_secret
+task-master.channel.sms.twilio.msId=your_message_service_id
+task-master.channel.sms.twilio.logger.level=NONE
 ```
 
-### 1.2 Twilio SendGrid
-For MailChimp Transactional API integration review the following documentation:
-[SendGrid API v3](https://www.twilio.com/docs/sendgrid/api-reference/mail-send/mail-send)
+### 1.2 Plivo
+TBD
 
-These are the requirements:
-- SendGrid Account
-- [API Key](https://app.sendgrid.com/login?redirect_to=%2Fsettings%2Fapi_keys)
-
-Once account is setup properly configure the following properties:
-``` 
-task-master.channel.email.sendgrid.url=https://api.sendgrid.com
-task-master.channel.email.sendgrid.apiVersion=/v3
-task-master.channel.email.sendgrid.basePath=${task-master.channel.email.sendgrid.url}${task-master.channel.email.sendgrid.apiVersion}
-task-master.channel.email.sendgrid.apikey=
-task-master.channel.email.sendgrid.from.email=
-task-master.channel.email.sendgrid.from.name=
-```
+### 1.2 AWS SNS
+TBD
 
 Do not upload the local version of the application.properties to the repository. Add to .gitignore file.
 
@@ -69,7 +58,7 @@ name = "GOOGLE_FUNCTION_SIGNATURE_TYPE"
 value =  "http"
 [[build.env]]
 name = "GOOGLE_FUNCTION_TARGET"
-value =  "com.onebank.taskmaster.createnotification.function.CreateNotificationFunctionEntryPoint"
+value =  "com.onebank.taskmaster.sendnotification.function.SendSmsNotificationFunctionEntryPoint"
 [build]
 builder = "gcr.io/buildpacks/builder:google-22"
 ```
@@ -77,12 +66,12 @@ builder = "gcr.io/buildpacks/builder:google-22"
 Build image using pack CLI:
 ```
 pack --version
-pack build createnotification
+pack build smssender
 ```
 Run a function container image
 ```
-docker run -it -p8080:8080 createnotification
-podman run -it -p8080:8080 createnotification
+docker run -it -p8080:8080 smssender
+podman run -it -p8080:8080 smssender
 ```
 Visit the running function by browsing to localhost:8080 (only when function is trigger by http events)
 
@@ -118,8 +107,8 @@ curl -s -X PUT 'http://localhost:8043/v1/projects/abc/subscriptions/mysub' -H 'C
 ```
 Make sure the function is running on port 8080. This is where the emulator will send push messages:
 ```
-docker run --rm -p 8080:8080 createnotification
-podman run -it -p8080:8080 createnotification
+docker run --rm -p 8080:8080 smssender
+podman run -it -p8080:8080 smssender
 ```
 In the second terminal, invoke the function by publishing a message. The message data needs to be encoded in base64. 
 This example uses the base64 encoded json data:
@@ -127,28 +116,23 @@ This example uses the base64 encoded json data:
 <your_payload>
 {
     "id": 1,
-    "channel": "EMAIL",
+    "channel": "SMS",
     "type": "TASK_CREATED",
-    "user": "your_email",
+    "user": "your_user_id",
     "title": "Learn Terraform",
     "message": "Learn Terraform from scratch",
-    "recipientName": "your_name",
-    "recipientEmail": "your_email",
-    "templateName": "task-created-template",
+    "recipientPhoneNumber": "your_phone_number",
+    "templateName": "your_template_id",
     "vars": {
-        "application_name": "Task Master",
-        "username": "your_name",
-        "current_year": "2025",
-        "task_title": "Learn Terraform",
-        "task_description": "Learn Terraform",
-        "task_due_date": "Learn Terraform",
-        "task_priority": "Learn Terraform"
+        "1": "your_name",
+        "2": "Learn Terraform",        
+        "3": "http://localhost:8080"
     }
 }
 <your_request_payload>
 {
     "data": {
-        "data": "<your_payload>",
+        "data": "<your_payload_in_base64_encoded>",
         "attributes": {
             "Content-Type": "application/json"
         }

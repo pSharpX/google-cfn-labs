@@ -23,7 +23,7 @@ logbook.filter.enabled=true
 logbook.secure-filter.enabled=true
 logbook.strategy=body-only-if-status-at-least
 logbook.minimum-status=400
-logbook.format.style=http
+logbook.format.style=json
 logbook.write.chunk-size=1000
 
 logbook.predicate.include[0].path=/api/**

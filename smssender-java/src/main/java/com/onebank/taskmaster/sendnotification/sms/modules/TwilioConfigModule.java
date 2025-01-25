@@ -11,6 +11,7 @@ import com.onebank.taskmaster.sendnotification.sms.config.twilio.TwilioClientReq
 import com.onebank.taskmaster.sendnotification.sms.config.twilio.TwilioConfigProperties;
 import com.onebank.taskmaster.sendnotification.sms.provider.twilio.TwilioClient;
 import com.onebank.taskmaster.sendnotification.sms.provider.twilio.TwilioClientErrorDecoder;
+import com.onebank.taskmaster.sendnotification.sms.provider.twilio.TwilioClientRequestFactory;
 import com.onebank.taskmaster.sendnotification.sms.provider.twilio.TwilioMessageServiceClient;
 import com.onebank.taskmaster.sendnotification.sms.service.sender.SmsSender;
 import com.onebank.taskmaster.sendnotification.sms.service.sender.TwilioSmsSender;
@@ -31,6 +32,7 @@ public class TwilioConfigModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(SmsSender.class).to(TwilioSmsSender.class).in(Scopes.SINGLETON);
+        bind(TwilioClientRequestFactory.class).in(Scopes.SINGLETON);
     }
 
     @Provides
