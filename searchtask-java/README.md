@@ -29,11 +29,11 @@ Download the project from the GitHub repo, get a copy from the src/main/resource
 
 In the application.properties modify these properties as needed to match your sqlserver configuration:
 ``` 
-spring.datasource.url=jdbc:sqlserver://localhost:1433;database=<your_database_name>;
-spring.datasource.username=SA
-spring.datasource.password=<password>
-spring.datasource.driverClassName=com.microsoft.sqlserver.jdbc.SQLServerDriver
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.SQLServer2012Dialect
+task-master.datasource.control-plane.url=jdbc:sqlserver://localhost:1433;database=<your_database_name>;
+task-master.datasource.control-plane.username=
+task-master.datasource.control-plane.password=
+task-master.datasource.control-plane.driverClassName=com.microsoft.sqlserver.jdbc.SQLServerDriver
+task-master.datasource.control-plane.jpa.properties.hibernate.dialect=org.hibernate.dialect.SQLServer2012Dialect
 ```
 
 ### 1.2 postgres
@@ -59,10 +59,10 @@ Download the project from the GitHub repo, get a copy from the src/main/resource
 
 In the application.properties modify these properties as needed to match your sqlserver configuration:
 ``` 
-spring.datasource.url=jdbc:postgresql://localhost:5432/controlplane_db
-spring.datasource.username=
-spring.datasource.password=
-spring.datasource.driver-class-name=org.postgresql.Driver
+task-master.datasource.control-plane.url=jdbc:postgresql://localhost:5432/controlplane_db
+task-master.datasource.control-plane.username=
+task-master.datasource.control-plane.password=
+task-master.datasource.control-plane.driverClassName=org.postgresql.Driver
 ```
 Do not upload the local version of the application.properties to the repository. Add to .gitignore file.
 
