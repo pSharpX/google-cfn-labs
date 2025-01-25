@@ -51,6 +51,7 @@ dependencies {
 	implementation 'io.github.openfeign:feign-okhttp'
 	implementation 'io.github.openfeign:feign-jackson'
 	implementation 'io.github.openfeign:feign-slf4j'
+	implementation 'io.github.openfeign.form:feign-form:3.8.0'
 
 	implementation 'org.zalando:logbook-core'
 	implementation 'org.zalando:logbook-json'
