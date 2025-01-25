@@ -28,7 +28,7 @@ task-master.channel.email.mailchimp.from.name=
 ```
 
 ### 1.2 Twilio SendGrid
-For MailChimp Transactional API integration review the following documentation:
+For SendGrid Email API integration review the following documentation:
 [SendGrid API v3](https://www.twilio.com/docs/sendgrid/api-reference/mail-send/mail-send)
 
 These are the requirements:
@@ -155,7 +155,7 @@ This example uses the base64 encoded json data:
 <your_request_payload>
 {
     "data": {
-        "data": "<your_payload>",
+        "data": "<your_payload_in_base64_encoded>",
         "attributes": {
             "Content-Type": "application/json"
         }
