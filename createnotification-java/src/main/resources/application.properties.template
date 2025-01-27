@@ -4,7 +4,7 @@ control-plane.server.port=8080
 task-master.profile=local
 task-master.database.enabled=true
 task-master.notification.enabled=true
-task-master.notification.engine=pubsub|kafka
+task-master.notification.engine=pubsub|kafka|rabbit
 task-master.notification.provisioned=false
 
 # Database
