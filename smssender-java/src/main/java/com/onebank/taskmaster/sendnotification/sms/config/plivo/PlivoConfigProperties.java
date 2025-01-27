@@ -15,7 +15,7 @@ public final class PlivoConfigProperties {
     private String sid;
     private String secret;
     private String msId;
-    private Logger logger;
+    private Logger logger = new Logger();
 
     @Getter
     @Setter

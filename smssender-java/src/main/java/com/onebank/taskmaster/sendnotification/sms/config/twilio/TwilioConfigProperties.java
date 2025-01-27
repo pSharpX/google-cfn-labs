@@ -15,7 +15,7 @@ public final class TwilioConfigProperties {
     private MessageService messageService = new MessageService();
     private Credentials credentials = new Credentials();
     private String msId;
-    private Logger logger;
+    private Logger logger = new Logger();
 
     @Getter
     @Setter
