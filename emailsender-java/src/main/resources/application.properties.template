@@ -15,6 +15,7 @@ task-master.channel.email.mailchimp.apikey=
 task-master.channel.email.mailchimp.config.mergeLanguage=handlebars
 task-master.channel.email.mailchimp.from.email=
 task-master.channel.email.mailchimp.from.name=
+task-master.channel.email.mailchimp.logger.level=FULL|NONE|BASIC|HEADERS
 
 task-master.channel.email.sendgrid.url=https://api.sendgrid.com
 task-master.channel.email.sendgrid.apiVersion=/v3
@@ -23,3 +24,4 @@ task-master.channel.email.sendgrid.basePath=https://api.sendgrid.com/v3
 task-master.channel.email.sendgrid.apikey=
 task-master.channel.email.sendgrid.from.email=
 task-master.channel.email.sendgrid.from.name=
+task-master.channel.email.sendgrid.logger.level=FULL|NONE|BASIC|HEADERS
