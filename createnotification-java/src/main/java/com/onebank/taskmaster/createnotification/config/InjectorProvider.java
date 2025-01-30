@@ -30,7 +30,7 @@ public class InjectorProvider {
                 new DatabaseModule(appConfigProperties),
                 new BrokerConfigModule(appConfigProperties),
                 new MockConfigModule(configProvider),
-                new FunctionConfigModule()
+                new FunctionConfigModule(configProvider)
         );
     }
 }

@@ -1,6 +1,5 @@
 package com.onebank.taskmaster.createnotification.service.providers;
 
-import com.onebank.taskmaster.createnotification.model.NotificationChannel;
 import com.onebank.taskmaster.createnotification.model.NotificationTemplateDetails;
 import com.onebank.taskmaster.createnotification.model.TaskNotificationRequest;
 import com.onebank.taskmaster.createnotification.model.TaskNotificationType;
@@ -22,8 +21,9 @@ public abstract class TaskMessageContentProvider<T extends TaskNotificationReque
 
     @Override
     public NotificationMessage getContent(@NonNull T request) {
-        NotificationTemplateDetails templateDetails = templateService.getTemplateDetails(TaskNotificationType.getByName(request.getType()));
-        return switch (NotificationChannel.getByName(request.getChannel())) {
+        TaskNotificationType taskNotificationType = TaskNotificationType.getByName(request.getType());
+        NotificationTemplateDetails templateDetails = templateService.getTemplateDetails(request.getChannel(), taskNotificationType);
+        return switch (request.getChannel()) {
             case EMAIL -> getEmailMessageContent(request, templateDetails);
             case SMS -> getSmsMessageContent(request, templateDetails);
             case PUSH -> getPushMessageContent(request, templateDetails);
@@ -61,7 +61,27 @@ public abstract class TaskMessageContentProvider<T extends TaskNotificationReque
     }
 
     public SmsNotificationMessage getSmsMessageContent(T request, NotificationTemplateDetails templateDetails) {
-        throw new UnsupportedOperationException();
+        SmsNotificationMessage notificationMessage = new SmsNotificationMessage();
+        notificationMessage.setId(request.getId());
+        notificationMessage.setType(TaskNotificationType.getByName(request.getType()));
+        notificationMessage.setUser(request.getUser());
+        notificationMessage.setTitle(request.getTitle());
+        notificationMessage.setMessage(request.getMessage());
+        notificationMessage.setRecipientName("Christian Rivera");
+        notificationMessage.setRecipientPhoneNumber("your_phone_number");
+        notificationMessage.setTemplateName(templateDetails.getTemplateName());
+
+        Map<String, String> vars = new HashMap<>();
+        for (Map.Entry<String, String> entry : templateDetails.getPlaceholder().entrySet()) {
+            String keyUpper = entry.getKey().toUpperCase();
+            String valueUpper = entry.getValue();
+            switch (keyUpper) {
+                case "APPLICATION_NAME" -> vars.put(valueUpper, "TaskMaster");
+                case "USERNAME" -> vars.put(valueUpper, notificationMessage.getRecipientName());
+            }
+        }
+        notificationMessage.setVars(vars);
+        return notificationMessage;
     }
 
     public InAppNotificationMessage getInAppMessageContent(T request, NotificationTemplateDetails templateDetails) {

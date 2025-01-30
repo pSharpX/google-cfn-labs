@@ -28,7 +28,8 @@ public class TaskNotificationRequest {
     @JsonIgnore
     private Long id;
     @NotificationChannelCode
-    private String channel;
+    @JsonIgnore
+    private NotificationChannel channel;
     @NotNull
     @TaskNotificationTypeCode
     private String type;

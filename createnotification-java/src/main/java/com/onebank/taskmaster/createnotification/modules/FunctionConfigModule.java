@@ -1,14 +1,15 @@
 package com.onebank.taskmaster.createnotification.modules;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
 import com.google.inject.Scopes;
-import com.google.inject.Singleton;
 import com.google.inject.multibindings.MapBinder;
 import com.onebank.taskmaster.createnotification.config.ConfigProvider;
 import com.onebank.taskmaster.createnotification.converter.TaskNotificationRequestConverter;
+import com.onebank.taskmaster.createnotification.model.NotificationChannel;
 import com.onebank.taskmaster.createnotification.model.TaskNotificationType;
+import com.onebank.taskmaster.createnotification.notifier.config.EmailNotificationTemplateConfig;
 import com.onebank.taskmaster.createnotification.notifier.config.NotificationTemplateConfig;
+import com.onebank.taskmaster.createnotification.notifier.config.SmsNotificationTemplateConfig;
 import com.onebank.taskmaster.createnotification.service.BuilderResolver;
 import com.onebank.taskmaster.createnotification.service.BuilderResolverService;
 import com.onebank.taskmaster.createnotification.service.ContentProviderResolver;
@@ -30,6 +31,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @SuppressWarnings("rawtypes")
 public class FunctionConfigModule extends AbstractModule {
+    private final ConfigProvider configProvider;
+
     @Override
     protected void configure() {
         MapBinder<TaskNotificationType, NotificationMessageBuilder> messageBuilderMapBinder = MapBinder.newMapBinder(binder(), TaskNotificationType.class, NotificationMessageBuilder.class);
@@ -44,15 +47,13 @@ public class FunctionConfigModule extends AbstractModule {
         contentProviderMapBinder.addBinding(TaskNotificationType.TASK_COMPLETED).to(TaskCompletedContentProvider.class).in(Scopes.SINGLETON);
         contentProviderMapBinder.addBinding(TaskNotificationType.TASK_COMPLETION_REMINDER).to(TaskCompletionReminderContentProvider.class).in(Scopes.SINGLETON);
 
+        MapBinder<NotificationChannel, NotificationTemplateConfig> templateConfigProviderMapBinder = MapBinder.newMapBinder(binder(), NotificationChannel.class, NotificationTemplateConfig.class);
+        templateConfigProviderMapBinder.addBinding(NotificationChannel.EMAIL).toInstance(configProvider.getConfig(EmailNotificationTemplateConfig.class));
+        templateConfigProviderMapBinder.addBinding(NotificationChannel.SMS).toInstance(configProvider.getConfig(SmsNotificationTemplateConfig.class));
+
         bind(BuilderResolver.class).to(BuilderResolverService.class).in(Scopes.SINGLETON);
         bind(ContentProviderResolver.class).to(ContentProviderResolverService.class).in(Scopes.SINGLETON);
         bind(NotificationCreator.class).to(NotificationCreatorService.class).in(Scopes.SINGLETON);
         bind(TaskNotificationRequestConverter.class).toInstance(new TaskNotificationRequestConverter());
-    }
-
-    @Provides
-    @Singleton
-    public NotificationTemplateConfig notificationTemplateConfig(final ConfigProvider configProvider) {
-        return configProvider.getConfig(NotificationTemplateConfig.class);
     }
 }

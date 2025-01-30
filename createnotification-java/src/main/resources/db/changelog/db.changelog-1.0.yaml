@@ -67,3 +67,104 @@ databaseChangeLog:
                   type: date
                   constraints:
                     nullable: true
+  - changeSet:
+      id: create-notifications-preferences-table
+      author: christian.rivera
+      comment: add notifications-preferences table definition
+      changes:
+        - createTable:
+            tableName: notifications_preferences
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: userIdentifier
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: emailEnabled
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: smsEnabled
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: pushEnabled
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: inAppEnabled
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: enabled
+                  type: boolean
+              - column:
+                  name: createdBy
+                  type: varchar(50)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: createdDate
+                  type: date
+                  constraints:
+                    nullable: true
+              - column:
+                  name: updatedBy
+                  type: varchar(30)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: updateDatetime
+                  type: date
+                  constraints:
+                    nullable: true
+  - changeSet:
+      id: default-notification-preference-record
+      author: christian.rivera
+      comment: insert default notifications-preferences record for testing
+      changes:
+        - insert:
+            tableName: notifications_preferences
+            columns:
+              - column:
+                  name: userIdentifier
+                  value: 'ce.rivera@globant.com'
+              - column:
+                  name: emailEnabled
+                  value: 'true'
+              - column:
+                  name: smsEnabled
+                  value: 'true'
+              - column:
+                  name: pushEnabled
+                  value: 'false'
+              - column:
+                  name: inAppEnabled
+                  value: 'false'
+              - column:
+                  name: enabled
+                  value: 'true'
+              - column:
+                  name: createdBy
+                  value: null
+              - column:
+                  name: createdDate
+                  value: null
+              - column:
+                  name: updatedBy
+                  value: null
+              - column:
+                  name: updateDatetime
+                  value: null

@@ -2,7 +2,6 @@ package com.onebank.taskmaster.createnotification.converter;
 
 import com.google.inject.Inject;
 import com.onebank.taskmaster.createnotification.entity.NotificationEntity;
-import com.onebank.taskmaster.createnotification.model.NotificationChannel;
 import com.onebank.taskmaster.createnotification.model.TaskNotificationRequest;
 import com.onebank.taskmaster.createnotification.model.TaskNotificationType;
 import lombok.NonNull;
@@ -17,7 +16,7 @@ public class TaskNotificationRequestConverter implements ConvertTo<TaskNotificat
                 .title(input.getTitle())
                 .message(input.getMessage())
                 .notificationType(TaskNotificationType.getByName(input.getType()))
-                .channel(NotificationChannel.getByName(input.getChannel()))
+                .channel(input.getChannel())
                 .status(input.getStatus())
                 .build();
     }

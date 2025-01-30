@@ -8,6 +8,7 @@ import com.onebank.taskmaster.createnotification.config.AppConfigProperties;
 import com.onebank.taskmaster.createnotification.notifier.config.DatabaseConfigProperties;
 import com.onebank.taskmaster.createnotification.repository.MyBatisNotificationPreferenceRepository;
 import com.onebank.taskmaster.createnotification.repository.MyBatisNotificationRepository;
+import com.onebank.taskmaster.createnotification.repository.NotificationPreferenceMapper;
 import com.onebank.taskmaster.createnotification.repository.NotificationPreferenceRepository;
 import com.onebank.taskmaster.createnotification.repository.NotificationMapper;
 import com.onebank.taskmaster.createnotification.repository.NotificationRepository;
@@ -38,7 +39,7 @@ public class MyBatisConfigModule extends AbstractModule {
         Environment environment = new Environment(appConfigProperties.getProfile(), new JdbcTransactionFactory(), dataSource);
         Configuration configuration = new Configuration(environment);
         configuration.addMapper(NotificationMapper.class);
-        configuration.addMapper(NotificationPreferenceRepository.class);
+        configuration.addMapper(NotificationPreferenceMapper.class);
 
         SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
         return builder.build(configuration);

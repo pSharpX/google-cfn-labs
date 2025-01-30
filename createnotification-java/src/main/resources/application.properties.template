@@ -53,8 +53,7 @@ task-master.channel.email.templates[0].placeholder.USERNAME=username
 
 # Email Notification Templates - task created
 task-master.channel.email.templates[1].notificationType=TASK_CREATED
-task-master.channel.email.templates[1].templateName=task-created-template
-#DevTaskMaster_TaskCreated
+task-master.channel.email.templates[1].templateName=DevTaskMaster_TaskCreated
 task-master.channel.email.templates[1].placeholder.APPLICATION_NAME=application_name
 task-master.channel.email.templates[1].placeholder.CURRENT_YEAR=current_year
 task-master.channel.email.templates[1].placeholder.USERNAME=username
@@ -72,6 +71,14 @@ task-master.channel.email.templates[3].templateName=DevTaskMaster_TaskCompleted
 task-master.channel.email.templates[3].placeholder.APPLICATION_NAME=application_name
 task-master.channel.email.templates[3].placeholder.CURRENT_YEAR=current_year
 task-master.channel.email.templates[3].placeholder.USERNAME=username
+
+
+# SMS Notification Templates - task created
+task-master.channel.sms.templates[0].notificationType=TASK_CREATED
+task-master.channel.sms.templates[0].templateName=task-created-template
+task-master.channel.sms.templates[0].placeholder.APPLICATION_NAME=ApplicationName
+task-master.channel.sms.templates[0].placeholder.USERNAME=Username
+
 
 logbook.filter.enabled=true
 logbook.secure-filter.enabled=true

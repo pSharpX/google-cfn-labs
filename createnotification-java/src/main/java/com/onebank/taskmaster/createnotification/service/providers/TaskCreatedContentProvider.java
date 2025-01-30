@@ -36,7 +36,10 @@ public class TaskCreatedContentProvider extends TaskMessageContentProvider<TaskC
 
     @Override
     public SmsNotificationMessage getSmsMessageContent(TaskCreatedNotificationRequest request, NotificationTemplateDetails templateDetails) {
-        return super.getSmsMessageContent(request, templateDetails);
+        SmsNotificationMessage notificationMessage = super.getSmsMessageContent(request, templateDetails);
+        notificationMessage.getVars().put("TaskTitle", request.getTaskTitle());
+        notificationMessage.getVars().put("TaskResourceUri", "http://localhost:8080");
+        return notificationMessage;
     }
 
     @Override
