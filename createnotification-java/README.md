@@ -245,7 +245,21 @@ docker run -it -p8080:8080 createnotification
 podman run -it -p8080:8080 createnotification
 ```
 Visit the running function by browsing to localhost:8080 (only when function is trigger by http events)
-
+```
+<your_payload>
+{
+    "type": "TASK_CREATED",
+    "user": "your_user",
+    "title": "Learn Terraform",
+    "message": "string",
+    "status": "CREATED",
+    "taskId": 1,
+    "taskTitle": "Learn Terraform",
+    "taskDescription": "Learn Terraform",
+    "taskDueDate": "10/10/2026",
+    "taskPriority": "Low"
+}
+```
 
 ### Build and Test
 For building and running test:
