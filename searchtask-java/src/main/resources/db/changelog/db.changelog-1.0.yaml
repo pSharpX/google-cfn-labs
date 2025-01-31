@@ -1,0 +1,160 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-tag-table
+      author: christian.rivera
+      comment: add tag table definition
+      changes:
+        - createTable:
+            tableName: tags
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    primaryKeyName: pk_tags
+              - column:
+                  name: name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: createdBy
+                  type: varchar(50)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: createdDate
+                  type: date
+                  constraints:
+                    nullable: true
+              - column:
+                  name: updatedBy
+                  type: varchar(30)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: updateDatetime
+                  type: date
+                  constraints:
+                    nullable: true
+  - changeSet:
+      id: create-task-table
+      author: christian.rivera
+      comment: add tasks table definition
+      changes:
+        - createTable:
+            tableName: tasks
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    primaryKeyName: pk_tasks
+              - column:
+                  name: title
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(800)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: weight
+                  type: smallint
+                  constraints:
+                    nullable: true
+              - column:
+                  name: progressStatus
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dueDate
+                  type: date
+                  constraints:
+                    nullable: true
+              - column:
+                  name: completionDate
+                  type: date
+                  constraints:
+                    nullable: true
+              - column:
+                  name: enabled
+                  type: boolean
+              - column:
+                  name: createdBy
+                  type: varchar(50)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: createdDate
+                  type: date
+                  constraints:
+                    nullable: true
+              - column:
+                  name: updatedBy
+                  type: varchar(30)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: updateDatetime
+                  type: date
+                  constraints:
+                    nullable: true
+  - changeSet:
+      id: create-tasks_tags-table
+      author: christian.rivera
+      comment: add relationship table definition for tasks and tags
+      changes:
+        - createTable:
+            tableName: tasks_tags
+            columns:
+              - column:
+                  name: task_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tag_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: create-fk-task-id
+      author: christian.rivera
+      comment: add foreign key for task-id in tasks_tags table
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: task_id
+            baseTableName: tasks_tags
+            constraintName: fk_task_id
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: tasks
+  - changeSet:
+      id: create-fk-tag-id
+      author: christian.rivera
+      comment: add foreign key for tag-id in tasks_tags table
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: tag_id
+            baseTableName: tasks_tags
+            constraintName: fk_tag_id
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: tags
