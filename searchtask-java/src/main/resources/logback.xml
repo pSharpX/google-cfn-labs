@@ -1,14 +1,14 @@
 <configuration>
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <property name="LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%thread] [correlationId=%X{correlationId:-}] [%logger] [%F:%L] %msg%n"/>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <Pattern>${LOG_PATTERN}</Pattern>
         </encoder>
     </appender>
 
-    <logger name="com.onebank.taskmaster.searchtask.repository.*" level="TRACE" />
-    <logger name="com.onebank.taskmaster.searchtask.service.*" level="WARN" />
-    <logger name="com.onebank.taskmaster.searchtask.function.*" level="WARN" />
-    <root level="debug">
-        <appender-ref ref="STDOUT" />
+    <logger name="org.zalando.logbook" level="TRACE" />
+    <logger name="com.onebank.taskmaster.searchtask" level="DEBUG" />
+    <root level="WARN">
+        <appender-ref ref="CONSOLE" />
     </root>
 </configuration>
