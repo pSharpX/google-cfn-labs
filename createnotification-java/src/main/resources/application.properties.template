@@ -1,6 +1,9 @@
 spring.application.name=createnotification
 control-plane.server.port=8080
 
+# Load properties from external file
+spring.config.location=C:\\Users\\ce.rivera\\application.properties
+
 task-master.profile=local
 task-master.database.enabled=true
 task-master.notification.enabled=true

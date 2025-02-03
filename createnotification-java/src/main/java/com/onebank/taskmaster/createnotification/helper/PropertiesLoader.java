@@ -2,6 +2,7 @@ package com.onebank.taskmaster.createnotification.helper;
 
 import lombok.experimental.UtilityClass;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
@@ -15,6 +16,16 @@ public class PropertiesLoader {
             properties.load(fis);
         } catch (IOException e) {
             throw new RuntimeException("Failed to load properties file", e);
+        }
+        return properties;
+    }
+
+    public static Properties loadPropertiesFromExternalLocation(String filePath) {
+        Properties properties = new Properties();
+        try (InputStream fis = new FileInputStream(filePath)) {
+            properties.load(fis);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load properties file from external location", e);
         }
         return properties;
     }
