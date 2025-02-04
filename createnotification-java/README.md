@@ -129,6 +129,9 @@ podman run -d -p 5672:5672 --hostname my-rabbit --name some-rabbit rabbitmq:3
 
 docker run -d -p 5672:5672 -p 15672:15672 --hostname my-rabbit --name some-rabbit -e RABBITMQ_DEFAULT_USER=user -e RABBITMQ_DEFAULT_PASS=password rabbitmq:3-management
 podman run -d -p 5672:5672 -p 15672:15672 --hostname my-rabbit --name some-rabbit -e RABBITMQ_DEFAULT_USER=user -e RABBITMQ_DEFAULT_PASS=password rabbitmq:3-management
+
+docker run -d -p 5672:5672 -p 15672:15672 -v $(pwd -W)/config/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf --hostname my-rabbit --name some-rabbit rabbitmq:3-management
+podman run -d -p 5672:5672 -p 15672:15672 -v $(pwd -W)/config/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf --hostname my-rabbit --name some-rabbit rabbitmq:3-management
 ``` 
 Open a shell in the broker container:
 ```
@@ -184,6 +187,50 @@ task-master.notification.rabbit.username=guest
 task-master.notification.rabbit.password=guest
 task-master.notification.rabbit.virtualhost=/
 ```
+
+### 2.2.1 Enable OAuth 2.0 using Auth0 (WIP)
+[Use auth0.com as OAuth 2.0 server](https://www.rabbitmq.com/docs/oauth2-examples-auth0)
+https://manage.auth0.com/dashboard
+
+
+Create oauth client in Auth0
+```
+WIP
+```
+Create oauth client in Auth0 using Terraform (Optional)
+```
+WIP
+```
+
+Enable oauth2.0 in rabbitmq.conf file
+```
+auth_backends.1 = rabbit_auth_backend_oauth2
+
+log.console.level = debug
+
+management.oauth_enabled = true
+management.oauth_client_id = {client_id}
+management.oauth_scopes = openid profile rabbitmq.tag:administrator
+
+auth_oauth2.resource_server_id = rabbitmq
+auth_oauth2.issuer = {domain_url}
+auth_oauth2.https.hostname_verification = wildcard
+```
+
+Run/Star container with custom rabbitmq.conf file
+```
+docker run -d -p 5672:5672 -p 15672:15672 -v $(pwd -W)/config/auth0/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf --hostname my-rabbit --name some-rabbit rabbitmq:3-management
+podman run -d -p 5672:5672 -p 15672:15672 -v $(pwd -W)/config/auth0/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf --hostname my-rabbit --name some-rabbit rabbitmq:3-management
+
+docker run -d -p 5672:5672 -p 15672:15672 -v $(pwd -W)/config/enabled_plugins:/etc/rabbitmq/enabled_plugins -v $(pwd -W)/config/auth0/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf --hostname my-rabbit --name some-rabbit rabbitmq:3-management
+podman run -d -p 5672:5672 -p 15672:15672 -v $(pwd -W)/config/enabled_plugins:/etc/rabbitmq/enabled_plugins -v $(pwd -W)/config/auth0/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf --hostname my-rabbit --name some-rabbit rabbitmq:3-management
+```
+
+Enable OAuth0 in RabbitMQ integration
+```
+WIP
+```
+
 
 ### 2.3 GCP PubSub
 [Spring Cloud GCP PubSub Documentation](https://googlecloudplatform.github.io/spring-cloud-gcp/3.1.0/reference/html/index.html#cloud-pubsub)
